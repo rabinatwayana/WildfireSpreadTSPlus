@@ -13,6 +13,7 @@ from segmentation_models_pytorch.losses import (DiceLoss, JaccardLoss,
                                                 LovaszLoss)
 from torchvision.ops import sigmoid_focal_loss
 import matplotlib.pyplot as plt
+import os
 
 class BaseModel(pl.LightningModule, ABC):
     """_summary_ Base model class for all models in this project. Implements the training, validation and test steps, 
@@ -22,10 +23,11 @@ class BaseModel(pl.LightningModule, ABC):
     def __init__(
         self,
         n_channels: int,
-        flatten_temporal_dimension: bool,
         pos_class_weight: float,
         loss_function: Literal["BCE", "Focal", "Lovasz", "Jaccard", "Dice"],
-        use_doy: bool = False,
+        flatten_temporal_dimension: bool = False,
+        temporal_position_mode: str | None = None,
+        # use_doy: bool = False,
         crop_before_eval: bool = False,
         required_img_size: Optional[Tuple[int, int]] = None,
         alpha_focal: Optional[float] = None,
@@ -41,7 +43,7 @@ class BaseModel(pl.LightningModule, ABC):
             flatten_temporal_dimension (bool): _description_ Whether to flatten the temporal dimension of the input data.
             pos_class_weight (float): _description_ Weight of the positive class in the loss function (only used for BCE and Focal loss).
             loss_function (Literal[&#39;BCE&#39;, &#39;Focal&#39;, &#39;Lovasz&#39;, &#39;Jaccard&#39;, &#39;Dice&#39;]): _description_ Which loss function to use. 
-            use_doy (bool, optional): _description_. Whether to use the doy of year (doy) as an additional input feature. Defaults to False.
+            # RT:REMOVE use_doy (bool, optional): _description_. Whether to use the doy of year (doy) as an additional input feature. Defaults to False.
             required_img_size (Optional[Tuple[int,int]], optional): _description_. Defaults to None. 
             When using a model that requires a specific image size, this parameter can be used to indicate it. We assume models require square images, 
             so this parameter indicates the side length. If set, the forward method will perform repeated inference on crops of the 
@@ -49,6 +51,9 @@ class BaseModel(pl.LightningModule, ABC):
         """
         super().__init__(*args, **kwargs)
         self.save_hyperparameters()
+        print(self.hparams.temporal_position_mode, "=========================")
+        # self.hparams.use_doy = use_doy #RT: As use_doy was not retained.
+        # self.hparams.temporal_position_mode=temporal_position_mode
 
         if required_img_size is not None:
             self.hparams.required_img_size = torch.Size(
@@ -80,6 +85,7 @@ class BaseModel(pl.LightningModule, ABC):
         self.test_pr_curve = torchmetrics.PrecisionRecallCurve("binary", thresholds=100)
 
     def forward(self, x, doys=None):
+    # def forward(self, x):
         # If doys are used, the model needs to re-implement the forward method
         if self.hparams.flatten_temporal_dimension and len(x.shape) == 5:
             x = x.flatten(start_dim=1, end_dim=2)
@@ -101,11 +107,25 @@ class BaseModel(pl.LightningModule, ABC):
         """
 
         # UTAE and TSViT use an additional doy feature as input. 
-        if self.hparams.use_doy:
-            x, y, doys = batch
-        else:
+        # if self.hparams.use_doy:
+        # if getattr(self.hparams, "use_doy", False): #RT
+        #     x, y, doys = batch
+        # else:
+        #     x, y = batch
+        #     doys = None
+        
+        if self.hparams.flatten_temporal_dimension:
             x, y = batch
             doys = None
+        else:
+            if self.hparams.temporal_position_mode in ("doy", "relative"):
+                x, y, doys = batch
+            else:
+                raise ValueError(
+                    f"Invalid temporal_position_mode='{self.hparams.temporal_position_mode}'. "
+                    "Expected 'doy' or 'relative'."
+                )
+
 
         # If the model requires a certain fixed size, perform repeated inference on crops of the image,
         # and aggregate the results. When we reach the last row or column, which might not be divisible by
@@ -285,6 +305,8 @@ class BaseModel(pl.LightningModule, ABC):
         self.conf_mat.update(y_hat, y)
 
         self.log("test_loss", loss.item(), sync_dist=True)
+        if loss is not None:
+            self.log("test_loss", loss.item(), on_step=False, on_epoch=True)
         self.log_dict(
             {
                 "test_f1": self.test_f1,
@@ -292,6 +314,7 @@ class BaseModel(pl.LightningModule, ABC):
                 "test_precision": self.test_precision,
                 "test_recall": self.test_recall,
                 "test_iou": self.test_iou,
+
             }
         )
         return loss
@@ -314,8 +337,10 @@ class BaseModel(pl.LightningModule, ABC):
         precision = precision.cpu().numpy()
         recall = recall.cpu().numpy()
         thresholds = thresholds.cpu().numpy()
+        output_npz_path = os.path.join(self.trainer.default_root_dir, f"test_pr_curve.npz")
+        # np.savez("test_pr_curve_data.npz", precision=precision, recall=recall, thresholds=thresholds)
+        np.savez(output_npz_path, precision=precision, recall=recall, thresholds=thresholds)
 
-        np.savez("test_pr_curve_data.npz", precision=precision, recall=recall, thresholds=thresholds)
 
         # # Plot the PR curve using Matplotlib
         fig, ax = plt.subplots() 
@@ -323,8 +348,12 @@ class BaseModel(pl.LightningModule, ABC):
         ax.set_xlabel('Recall')
         ax.set_ylabel('Precision')
         ax.set_title('Precision-Recall Curve')
+        output_png_path = os.path.join(self.trainer.default_root_dir, f"test_pr_curve.png")
+        fig.savefig(output_png_path, dpi=300, bbox_inches="tight")
         
-        #wandb.log({"Test PR Curve": wandb.Image(fig)})
+        if wandb.run is not None:
+            wandb.log({"Test PR Curve": wandb.Image(fig)})
+        plt.close(fig)
 
     def predict_step(self, batch, batch_idx, dataloader_idx=0):
         x, y = batch

@@ -18,8 +18,8 @@ class MyLightningCLI(LightningCLI):
     def add_arguments_to_parser(self, parser):
         parser.link_arguments("trainer.default_root_dir",
                               "trainer.logger.init_args.save_dir")
-        parser.link_arguments("model.class_path",
-                              "trainer.logger.init_args.name")
+        # parser.link_arguments("model.class_path",
+        #                       "trainer.logger.init_args.name")
         parser.add_argument("--do_train", type=bool,
                             help="If True: skip training the model.")
         parser.add_argument("--do_predict", type=bool,
@@ -42,9 +42,23 @@ class MyLightningCLI(LightningCLI):
 
         # The exact positive class weight changes with the data fold in the data module, but the weight is needed to instantiate the model.
         # Non-fire pixels are marked as missing values in the active fire feature, so we simply use that to compute the positive class weight.
-        train_years, _, _ = FireSpreadDataModule.split_fires(
+        
+        # train_years, _, _ = FireSpreadDataModule.split_fires(
+        #     self.config.data.data_fold_id, self.config.data.additional_data)
+
+        if self.config.data.do_cross_year_experiment:
+            # train_event_ids, val_event_ids, test_event_ids = FireSpreadDataModule.split_within_year_fires(self.cross_year_train_id, self.cross_year_split_json_path) #year_id is equivalent to data_fold_id
+            train_years=[self.config.data.cross_year_train_id]
+            print(train_years, "hvhvjhhfjhvjhv=============")
+            # val_years= train_years
+            # test_years=train_years
+        else:
+            # train_years, val_years, test_years = self.split_fires(
+            #     self.data_fold_id, self.additional_data)
+            train_years, _, _ = FireSpreadDataModule.split_fires(
             self.config.data.data_fold_id, self.config.data.additional_data)
-        _, _, missing_values_rates = get_means_stds_missing_values(train_years)
+        print("=============train.py===================")
+        _, _, missing_values_rates = get_means_stds_missing_values(train_years, self.config.data.do_cross_year_experiment)
         fire_rate = 1 - missing_values_rates[-1]
         pos_class_weight = float(1 / fire_rate)
 
@@ -69,6 +83,8 @@ class MyLightningCLI(LightningCLI):
         Also define min and max metrics in wandb, because otherwise it just reports the 
         last known values, which is not what we want.
         """
+        if wandb.run is None: # RT: To prevent setup if wandb is disabled
+            return
         config_file_name = os.path.join(wandb.run.dir, "cli_config.yaml")
 
         cfg_string = self.parser.dump(self.config, skip_none=False)
@@ -125,6 +141,8 @@ def main():
             cli.config.trainer.default_root_dir, f"predictions_{wandb.run.id}.pt")
         torch.save(fire_masks_combined, predictions_file_name)
 
+    if wandb.run is not None:
+        wandb.finish()
 
 if __name__ == "__main__":
     main()

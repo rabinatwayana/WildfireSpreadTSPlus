@@ -5,7 +5,7 @@ import rasterio
 from torch.utils.data import Dataset
 import torch
 import numpy as np
-from torch.utils.data.dataset import T_co
+# from torch.utils.data.dataset import T_co
 import glob
 import warnings
 from .utils import get_means_stds_missing_values, get_indices_of_degree_features
@@ -13,12 +13,11 @@ import torchvision.transforms.functional as TF
 import h5py
 from datetime import datetime
 
-
 class FireSpreadDataset(Dataset):
     def __init__(self, data_dir: str, included_fire_years: List[int], n_leading_observations: int,
                  crop_side_length: int, load_from_hdf5: bool, is_train: bool, remove_duplicate_features: bool,
                  stats_years: List[int], n_leading_observations_test_adjustment: Optional[int] = None, 
-                 features_to_keep: Optional[List[int]] = None, return_doy: bool = False, is_pad: Optional[bool] = False):
+                 features_to_keep: Optional[List[int]] = None, return_doy: bool = False, is_pad: Optional[bool] = False,include_event_ids: Optional[dict] = None, do_cross_year_experiment: Optional[bool]=False):
         """_summary_
 
         Args:
@@ -50,6 +49,8 @@ class FireSpreadDataset(Dataset):
         self.n_leading_observations = n_leading_observations
         self.n_leading_observations_test_adjustment = n_leading_observations_test_adjustment
         self.included_fire_years = included_fire_years
+        self.include_event_ids = include_event_ids
+        self.do_cross_year_experiment = do_cross_year_experiment
         self.data_dir = data_dir
         self.is_pad = is_pad
 
@@ -73,7 +74,7 @@ class FireSpreadDataset(Dataset):
         # Used in preprocessing and normalization. Better to define it once than build/call for every data point
         # The one-hot matrix is used for one-hot encoding of land cover classes
         self.one_hot_matrix = torch.eye(17)
-        self.means, self.stds, _ = get_means_stds_missing_values(self.stats_years)
+        self.means, self.stds, _ = get_means_stds_missing_values(self.stats_years, self.do_cross_year_experiment)
         self.means = self.means[None, :, None, None]
         self.stds = self.stds[None, :, None, None]
         self.indices_of_degree_features = get_indices_of_degree_features()
@@ -217,29 +218,58 @@ class FireSpreadDataset(Dataset):
             b) the individual hdf5 file for each fire.
         """
         imgs_per_fire = {}
-        for fire_year in self.included_fire_years:
+        if self.include_event_ids:
+            fire_year= self.included_fire_years[0]
             imgs_per_fire[fire_year] = {}
-
+        
             if not self.load_from_hdf5:
-                fires_in_year = glob.glob(f"{self.data_dir}/{fire_year}/*/")
-                fires_in_year.sort()
-                for fire_dir_path in fires_in_year:
-                    fire_name = fire_dir_path.split("/")[-2]
+                for fire_name in self.include_event_ids:
+                    fire_dir_path = f"{self.data_dir}/{fire_year}/{fire_name}/"
                     fire_img_paths = glob.glob(f"{fire_dir_path}/*.tif")
                     fire_img_paths.sort()
                     
                     imgs_per_fire[fire_year][fire_name] = fire_img_paths
 
                     if len(fire_img_paths) == 0:
-                        warnings.warn(f"In dataset preparation: Fire {fire_year}: {fire_name} contains no images.",
-                                      RuntimeWarning)
+                        warnings.warn(
+                            f"In dataset preparation: Fire {fire_year}: {fire_name} contains no images.",
+                            RuntimeWarning
+                        )
             else:
-                fires_in_year = glob.glob(
-                    f"{self.data_dir}/{fire_year}/*.hdf5")
-                fires_in_year.sort()
-                for fire_hdf5 in fires_in_year:
-                    fire_name = Path(fire_hdf5).stem
-                    imgs_per_fire[fire_year][fire_name] = [fire_hdf5]
+                for fire_name in self.include_event_ids:
+                    fire_hdf5_path = f"{self.data_dir}/{fire_year}/{fire_name}.hdf5"
+                    if Path(fire_hdf5_path).is_file():
+                        imgs_per_fire[fire_year][fire_name] = [fire_hdf5_path]
+                    else:
+                        warnings.warn(
+                            f"In dataset preparation: Fire {fire_year}: {fire_name} HDF5 file not found.",
+                            RuntimeWarning
+                    )
+
+        else:
+            for fire_year in self.included_fire_years:
+                imgs_per_fire[fire_year] = {}
+
+                if not self.load_from_hdf5:
+                    fires_in_year = glob.glob(f"{self.data_dir}/{fire_year}/*/")
+                    fires_in_year.sort()
+                    for fire_dir_path in fires_in_year:
+                        fire_name = fire_dir_path.split("/")[-2]
+                        fire_img_paths = glob.glob(f"{fire_dir_path}/*.tif")
+                        fire_img_paths.sort()
+                        
+                        imgs_per_fire[fire_year][fire_name] = fire_img_paths
+
+                        if len(fire_img_paths) == 0:
+                            warnings.warn(f"In dataset preparation: Fire {fire_year}: {fire_name} contains no images.",
+                                        RuntimeWarning)
+                else:
+                    fires_in_year = glob.glob(
+                        f"{self.data_dir}/{fire_year}/*.hdf5")
+                    fires_in_year.sort()
+                    for fire_hdf5 in fires_in_year:
+                        fire_name = Path(fire_hdf5).stem
+                        imgs_per_fire[fire_year][fire_name] = [fire_hdf5]
 
         return imgs_per_fire
 
@@ -594,38 +624,39 @@ class FireSpreadDataset(Dataset):
                 20: 'forecast temperature',
                 21: 'forecast specific humidity',
                 22: 'active fire'}
+    
+    #RT: Handled in HDF5 dataset creation itself
+    # def get_generator_for_hdf5(self):
+    #     """_summary_ Creates a generator that is used to turn the dataset into HDF5 files. It applies a few 
+    #     preprocessing steps to the active fire features that need to be applied anyway, to save some computation.
 
-    def get_generator_for_hdf5(self):
-        """_summary_ Creates a generator that is used to turn the dataset into HDF5 files. It applies a few 
-        preprocessing steps to the active fire features that need to be applied anyway, to save some computation.
+    #     Yields:
+    #         _type_: _description_ Generator that yields tuples of (year, fire_name, img_dates, lnglat, img_array) 
+    #         where img_array contains all images available for the respective fire, preprocessed such 
+    #         that active fire detection times are converted to hours. lnglat contains longitude and latitude
+    #         of the center of the image.
+    #     """
 
-        Yields:
-            _type_: _description_ Generator that yields tuples of (year, fire_name, img_dates, lnglat, img_array) 
-            where img_array contains all images available for the respective fire, preprocessed such 
-            that active fire detection times are converted to hours. lnglat contains longitude and latitude
-            of the center of the image.
-        """
+    #     for year, fires_in_year in self.imgs_per_fire.items():
+    #         for fire_name, img_files in fires_in_year.items():
+    #             imgs = []
+    #             lnglat = None
+    #             for img_path in img_files:
+    #                 with rasterio.open(img_path, 'r') as ds:
+    #                     imgs.append(ds.read())
+    #                     if lnglat is None:
+    #                         lnglat = ds.lnglat()
+    #             x = np.stack(imgs, axis=0)
 
-        for year, fires_in_year in self.imgs_per_fire.items():
-            for fire_name, img_files in fires_in_year.items():
-                imgs = []
-                lnglat = None
-                for img_path in img_files:
-                    with rasterio.open(img_path, 'r') as ds:
-                        imgs.append(ds.read())
-                        if lnglat is None:
-                            lnglat = ds.lnglat()
-                x = np.stack(imgs, axis=0)
+    #             # Get dates from filenames
+    #             img_dates = [img_path.split("/")[-1].split("_")[0].replace(".tif", "")
+    #                          for img_path in img_files]
 
-                # Get dates from filenames
-                img_dates = [img_path.split("/")[-1].split("_")[0].replace(".tif", "")
-                             for img_path in img_files]
+    #             # Active fire masks have nans where no detections occur. In general, we want to replace NaNs with
+    #             # the mean of the respective feature. Since the NaNs here don't represent missing values, we replace
+    #             # them with 0 instead.
+    #             x[:, -1, ...] = np.nan_to_num(x[:, -1, ...], nan=0)
 
-                # Active fire masks have nans where no detections occur. In general, we want to replace NaNs with
-                # the mean of the respective feature. Since the NaNs here don't represent missing values, we replace
-                # them with 0 instead.
-                x[:, -1, ...] = np.nan_to_num(x[:, -1, ...], nan=0)
-
-                # Turn active fire detection time from hhmm to hh.
-                x[:, -1, ...] = np.floor_divide(x[:, -1, ...], 100)
-                yield year, fire_name, img_dates, lnglat, x
+    #             # Turn active fire detection time from hhmm to hh.
+    #             x[:, -1, ...] = np.floor_divide(x[:, -1, ...], 100)
+    #             yield year, fire_name, img_dates, lnglat, x

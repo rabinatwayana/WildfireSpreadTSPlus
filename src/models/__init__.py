@@ -6,6 +6,7 @@ from .UTAELightning import UTAELightning
 from .SwinUnetLightning import SwinUnetLightning
 from .SwinUnetTempLightning import SwinUnetTempLightning
 from .UTAELightningDumb import UTAELightningDumb
-from .TransUnetLightning import TransUnetLightning
+# from .TransUnetLightning import TransUnetLightning
 from .SMPTempModel import SMPTempModel 
-from .SegFormerLightning import SegFormerLightning
+# from .SegFormerLightning import SegFormerLightning
+from .UTAELightningRabina import UTAELightningRabina
