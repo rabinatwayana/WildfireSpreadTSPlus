@@ -69,6 +69,17 @@ class MyLightningCLI(LightningCLI):
         Also define min and max metrics in wandb, because otherwise it just reports the 
         last known values, which is not what we want.
         """
+        logger = getattr(self.trainer, "logger", None)
+        if logger is None:
+            return
+
+        # WandbLogger initializes lazily. Accessing `.experiment` ensures the run exists
+        # before we attempt to use `wandb.run`.
+        _ = logger.experiment
+        if wandb.run is None:
+            return
+
+        os.makedirs(wandb.run.dir, exist_ok=True)
         config_file_name = os.path.join(wandb.run.dir, "cli_config.yaml")
 
         cfg_string = self.parser.dump(self.config, skip_none=False)

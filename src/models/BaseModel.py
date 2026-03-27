@@ -49,6 +49,7 @@ class BaseModel(pl.LightningModule, ABC):
         """
         super().__init__(*args, **kwargs)
         self.save_hyperparameters()
+        self.hparams.use_doy=use_doy
 
         if required_img_size is not None:
             self.hparams.required_img_size = torch.Size(
@@ -101,7 +102,7 @@ class BaseModel(pl.LightningModule, ABC):
         """
 
         # UTAE and TSViT use an additional doy feature as input. 
-        if self.hparams.use_doy:
+        if getattr(self.hparams, "use_doy", False):
             x, y, doys = batch
         else:
             x, y = batch
