@@ -124,7 +124,7 @@ def main() -> None:
 
     def objective(trial: "optuna.Trial") -> float:
         
-        if wandb.run is None: # RT: To prevent setup if wandb is disabled
+        if wandb.run is not None: # RT: To prevent setup if wandb is disabled
             wandb.finish()
         
         # pl.seed_everything(42 + trial.number)

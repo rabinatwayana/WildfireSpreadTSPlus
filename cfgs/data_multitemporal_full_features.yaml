@@ -7,4 +7,4 @@ num_workers: 8
 remove_duplicate_features: false
 n_leading_observations_test_adjustment: 5
 features_to_keep: null
-return_doy: true
+# return_doy: true

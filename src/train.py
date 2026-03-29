@@ -66,7 +66,7 @@ class MyLightningCLI(LightningCLI):
         print(f" \n fire_rate = {fire_rate}")
 
         print(f" \n Computed pos_class_weight = {pos_class_weight}")
-        pos_class_weight = min (50.0, pos_class_weight)
+        pos_class_weight = min (1000.0, pos_class_weight)
 
         print(f" \n Using pos_class_weight after clamping = {pos_class_weight}")
 

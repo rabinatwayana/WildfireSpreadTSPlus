@@ -261,7 +261,7 @@ class BaseModel(pl.LightningModule, ABC):
             "train_loss",
             # loss.item(),
             loss,
-            on_step=True,
+            on_step=False,
             on_epoch=True,
             prog_bar=True,
             logger=True,
@@ -270,18 +270,18 @@ class BaseModel(pl.LightningModule, ABC):
         self.log(
             "train_avg_precision",
             self.train_avg_precision,
-            on_step=True,
+            on_step=False,
             on_epoch=True,
-            prog_bar=True,
+            prog_bar=False,
             logger=True,
             sync_dist=True,
         )
         self.log(
             "train_f1",
             self.train_f1,
-            on_step=True,
+            on_step=False,
             on_epoch=True,
-            prog_bar=True,
+            prog_bar=False,
             logger=True,
             sync_dist=True,
         )
@@ -297,6 +297,7 @@ class BaseModel(pl.LightningModule, ABC):
         Returns:
             _type_: _description_
         """
+        # print(f"Batch {batch_idx}: val_loss updating")
         y_hat, y = self.get_pred_and_gt(batch)
 
         if self.hparams.crop_before_eval:
@@ -321,7 +322,7 @@ class BaseModel(pl.LightningModule, ABC):
             self.val_avg_precision,
             on_step=False,
             on_epoch=True,
-            prog_bar=True,
+            prog_bar=False,
             logger=True,
             sync_dist=True,
         )
@@ -330,7 +331,7 @@ class BaseModel(pl.LightningModule, ABC):
             self.val_f1,
             on_step=False,
             on_epoch=True,
-            prog_bar=True,
+            prog_bar=False,
             logger=True,
             sync_dist=True,
         )  

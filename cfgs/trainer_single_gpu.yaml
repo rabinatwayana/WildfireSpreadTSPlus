@@ -22,11 +22,11 @@ callbacks:
     init_args:
       monitor: val_avg_precision
       mode: max
-      patience: 5 #up to fold 5, parience was 30
+      patience: 5 #5 for tuning, 15 for training
       min_delta: 0.0001
       verbose: true
 fast_dev_run: false
-max_epochs: 2
+max_epochs: 100
 min_epochs: -1
 max_steps: -1
 min_steps: -1
@@ -39,7 +39,7 @@ overfit_batches: 0.0 # off
 val_check_interval: null
 check_val_every_n_epoch: 1
 num_sanity_val_steps: null
-log_every_n_steps: 1
+log_every_n_steps: null
 enable_checkpointing: null
 enable_progress_bar: true
 enable_model_summary: null
