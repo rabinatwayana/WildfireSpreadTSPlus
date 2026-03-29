@@ -1,3 +1,6 @@
+"""
+RT: Return doys handled for tiff_files as well
+"""
 from pathlib import Path
 from typing import List, Optional
 
@@ -149,14 +152,28 @@ class FireSpreadDataset(Dataset):
             x, y = np.split(imgs, [-1], axis=0)
             # Last image's active fire mask is used as label, rest is input data
             y = y[0, -1, ...]
+        # else:
+        #     imgs_to_load = self.imgs_per_fire[found_fire_year][found_fire_name][in_fire_index:end_index]
+        #     imgs = []
+        #     for img_path in imgs_to_load:
+        #         with rasterio.open(img_path, 'r') as ds:
+        #             imgs.append(ds.read())
+        #     x = np.stack(imgs[:-1], axis=0)
+        #     y = imgs[-1][-1, ...]
         else:
             imgs_to_load = self.imgs_per_fire[found_fire_year][found_fire_name][in_fire_index:end_index]
             imgs = []
             for img_path in imgs_to_load:
                 with rasterio.open(img_path, 'r') as ds:
                     imgs.append(ds.read())
+
             x = np.stack(imgs[:-1], axis=0)
             y = imgs[-1][-1, ...]
+
+            if self.return_doy:
+                img_dates = [Path(p).name.split("_")[0].replace(".tif", "") for p in imgs_to_load[:-1]]
+                doys = self.img_dates_to_doys(img_dates)
+                doys = torch.Tensor(doys)
 
         if self.return_doy:
             return x, y, doys
@@ -197,9 +214,9 @@ class FireSpreadDataset(Dataset):
     def validate_inputs(self):
         if self.n_leading_observations < 1:
             raise ValueError("Need at least one day of observations.")
-        if self.return_doy and not self.load_from_hdf5:
-            raise NotImplementedError(
-                "Returning day of year is only implemented for hdf5 files.")
+        # if self.return_doy and not self.load_from_hdf5:
+        #     raise NotImplementedError(
+        #         "Returning day of year is only implemented for hdf5 files.")
         if self.n_leading_observations_test_adjustment is not None:
             if self.n_leading_observations_test_adjustment < self.n_leading_observations:
                 raise ValueError(
@@ -223,6 +240,7 @@ class FireSpreadDataset(Dataset):
             imgs_per_fire[fire_year] = {}
         
             if not self.load_from_hdf5:
+                print("Loading tiff files instead of HDF5")
                 for fire_name in self.include_event_ids:
                     fire_dir_path = f"{self.data_dir}/{fire_year}/{fire_name}/"
                     fire_img_paths = glob.glob(f"{fire_dir_path}/*.tif")
@@ -236,6 +254,7 @@ class FireSpreadDataset(Dataset):
                             RuntimeWarning
                         )
             else:
+                print("Loading HDF5 files")
                 for fire_name in self.include_event_ids:
                     fire_hdf5_path = f"{self.data_dir}/{fire_year}/{fire_name}.hdf5"
                     if Path(fire_hdf5_path).is_file():
@@ -317,8 +336,9 @@ class FireSpreadDataset(Dataset):
         Returns:
             _type_: _description_ Standardized input data, of shape (time_steps, features, height, width)
         """
-
-        x = (x - self.means) / self.stds
+        safe_stds = np.where(np.isnan(self.stds) | (self.stds == 0), 1.0, self.stds)
+        x = (x - self.means) / safe_stds
+        # x = (x - self.means) / self.stds
 
         return x
 
@@ -625,7 +645,7 @@ class FireSpreadDataset(Dataset):
                 21: 'forecast specific humidity',
                 22: 'active fire'}
     
-    #RT: Handled in HDF5 dataset creation itself
+    # #RT: Handled in HDF5 dataset creation itself
     # def get_generator_for_hdf5(self):
     #     """_summary_ Creates a generator that is used to turn the dataset into HDF5 files. It applies a few 
     #     preprocessing steps to the active fire features that need to be applied anyway, to save some computation.

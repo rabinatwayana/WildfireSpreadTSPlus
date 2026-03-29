@@ -59,27 +59,34 @@ class UTAELightningRabina(BaseModel):
         encoder_weights = encoder_weights if encoder_weights != "none" else None
         print(f"\n Using encoder_weights: {encoder_weights}")
         if encoder_weights == "pastis":
-            repo_default = os.path.join(
-                os.path.dirname(__file__), "utae_paps_models", "model.pth.tar"
-            )
-            env_ckpt = os.environ.get("UTAE_PASTIS_CKPT")
-            candidate_paths = [
-                pretrained_checkpoint_path,
-                env_ckpt,
-                '/develop/data/utae_pre/model.pth.tar',
-                repo_default,
-                '/home/sl221120/WildfireSpreadTS/src/models/utae_paps_models/model.pth.tar',
-            ]
-            pretrained_checkpoint = next(
-                (path for path in candidate_paths if path and os.path.exists(path)),
-                None,
-            )
-            if pretrained_checkpoint is None:
+
+            # repo_default = os.path.join(
+            #     os.path.dirname(__file__), "utae_paps_models", "model.pth.tar"
+            # )
+            # env_ckpt = os.environ.get("UTAE_PASTIS_CKPT")
+            # candidate_paths = [
+            #     pretrained_checkpoint_path,
+            #     env_ckpt,
+            #     '/develop/data/utae_pre/model.pth.tar',
+            #     repo_default,
+            #     '/home/sl221120/WildfireSpreadTS/src/models/utae_paps_models/model.pth.tar',
+            # ]
+            # pretrained_checkpoint = next(
+            #     (path for path in candidate_paths if path and os.path.exists(path)),
+            #     None,
+            # )
+            # if pretrained_checkpoint is None:
+            #     raise FileNotFoundError(
+            #         "PASTIS checkpoint not found. Set model.init_args.pretrained_checkpoint_path "
+            #         "or export UTAE_PASTIS_CKPT."
+            #     )
+            # self.load_checkpoint(pretrained_checkpoint)
+            if pretrained_checkpoint_path is None:
                 raise FileNotFoundError(
                     "PASTIS checkpoint not found. Set model.init_args.pretrained_checkpoint_path "
                     "or export UTAE_PASTIS_CKPT."
                 )
-            self.load_checkpoint(pretrained_checkpoint)
+            self.load_checkpoint(pretrained_checkpoint_path)
 
 
     def load_checkpoint(self, checkpoint_path: str) -> None:
@@ -129,6 +136,6 @@ class UTAELightningRabina(BaseModel):
 
     # override forward function of BaseModel
     def forward(self, x: torch.Tensor, doys: torch.Tensor | None = None) -> torch.Tensor:
-        print(f"\n Using overidden forward pass of UTAE")
+        # print(f"\n Using overidden forward pass of UTAE")
         batch_positions = self._get_temporal_positions(x, doys)
         return self.model(x, batch_positions=batch_positions, return_att=False)

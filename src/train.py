@@ -6,6 +6,7 @@ from models import SMPModel, BaseModel, ConvLSTMLightning, LogisticRegression  #
 from models import BaseModel
 import wandb
 import os
+import time
 
 from dataloader.FireSpreadDataset import FireSpreadDataset
 from dataloader.utils import get_means_stds_missing_values
@@ -49,7 +50,7 @@ class MyLightningCLI(LightningCLI):
         if self.config.data.do_cross_year_experiment:
             # train_event_ids, val_event_ids, test_event_ids = FireSpreadDataModule.split_within_year_fires(self.cross_year_train_id, self.cross_year_split_json_path) #year_id is equivalent to data_fold_id
             train_years=[self.config.data.cross_year_train_id]
-            print(train_years, "hvhvjhhfjhvjhv=============")
+            # print(train_years,)
             # val_years= train_years
             # test_years=train_years
         else:
@@ -61,6 +62,13 @@ class MyLightningCLI(LightningCLI):
         _, _, missing_values_rates = get_means_stds_missing_values(train_years, self.config.data.do_cross_year_experiment)
         fire_rate = 1 - missing_values_rates[-1]
         pos_class_weight = float(1 / fire_rate)
+
+        print(f" \n fire_rate = {fire_rate}")
+
+        print(f" \n Computed pos_class_weight = {pos_class_weight}")
+        pos_class_weight = min (50.0, pos_class_weight)
+
+        print(f" \n Using pos_class_weight after clamping = {pos_class_weight}")
 
         self.config.model.init_args.pos_class_weight = pos_class_weight
 
@@ -96,6 +104,8 @@ class MyLightningCLI(LightningCLI):
         wandb.define_metric("train_f1_epoch", summary="max")
         wandb.define_metric("val_f1", summary="max")
         wandb.define_metric("val_avg_precision", summary="max")
+        wandb.define_metric("train_avg_precision_epoch", summary="max")
+
 
 
 def main():
@@ -107,14 +117,19 @@ def main():
     cli.wandb_setup()
 
     if cli.config.do_train:
+        start=time.perf_counter()
         cli.trainer.fit(cli.model, cli.datamodule,
                         ckpt_path=cli.config.ckpt_path)
+        end = time.perf_counter()
+        elapsed_time=end-start
+        minutes, seconds = divmod(elapsed_time, 60)
+        print(f"Training Time : {int(minutes)}m {seconds:.2f}s")
 
-    # If we have trained a model, use the best checkpoint for testing and predicting.
+    
     # Without this, the model's state at the end of the training would be used, which is not necessarily the best.
     ckpt = cli.config.ckpt_path
     if cli.config.do_train:
-        ckpt = "best"
+        ckpt = "best" # If we have trained a model, use the best checkpoint for testing and predicting.
 
     if cli.config.do_validate:
         cli.trainer.validate(cli.model, cli.datamodule, ckpt_path=ckpt)

@@ -1,3 +1,20 @@
+"""
+RT Improvements:
+Added sync_dist=True in all metrics and loss
+added train_avg_precision
+loss, instead of loss.item(), as loss.item() turns the tensor into a plain Python number, so Lightning can no longer treat it like a tensor for distributed reduction the same way.
+added f1_threshild for test metrics
+
+get_pred_and_gt() now accepts both (x, y) and (x, y, doys) instead of wrongly forcing all non-flattened models to use doys.
+repeated-crop inference now supports both 4D and 5D inputs.
+predict_step() now handles doys correctly and extracts the active-fire channel safely for both 4D and 5D inputs.
+duplicate test_loss logging was removed.
+test metrics are now logged once, explicitly, at epoch level.
+focal loss no longer uses the broken 1 - pos_class_weight alpha; it now uses alpha_focal if provided, otherwise 0.25.
+the duplicate/unused PR-curve figure creation was cleaned up.
+
+"""
+
 import math
 from abc import ABC
 from typing import Any, Literal, Optional, Tuple
@@ -27,10 +44,10 @@ class BaseModel(pl.LightningModule, ABC):
         loss_function: Literal["BCE", "Focal", "Lovasz", "Jaccard", "Dice"],
         flatten_temporal_dimension: bool = False,
         temporal_position_mode: str | None = None,
-        # use_doy: bool = False,
+        # use_doy: bool = False, #RT
         crop_before_eval: bool = False,
         required_img_size: Optional[Tuple[int, int]] = None,
-        alpha_focal: Optional[float] = None,
+        alpha_focal: Optional[float] = None, 
         f1_threshold: Optional[float] = None,
         *args: Any,
         **kwargs: Any
@@ -51,7 +68,9 @@ class BaseModel(pl.LightningModule, ABC):
         """
         super().__init__(*args, **kwargs)
         self.save_hyperparameters()
-        print(self.hparams.temporal_position_mode, "=========================")
+        print("Using temporal_position_mode = ",self.hparams.temporal_position_mode)
+        print("Using loss function = ",self.hparams.loss_function)
+
         # self.hparams.use_doy = use_doy #RT: As use_doy was not retained.
         # self.hparams.temporal_position_mode=temporal_position_mode
 
@@ -61,25 +80,35 @@ class BaseModel(pl.LightningModule, ABC):
             )
 
         # Normalize class weights by assuming that the negative class has weight 1
-        if self.hparams.loss_function == "Focal" and self.hparams.pos_class_weight > 1:
-            self.hparams.pos_class_weight /= 1 + self.hparams.pos_class_weight
+        if self.hparams.loss_function == "Focal":
+            if self.hparams.alpha_focal is None:
+                w = self.hparams.pos_class_weight
+                alpha = w / (1 + w) if w is not None else 0.75
+                self.hparams.alpha_focal = min(alpha, 0.95)
+        #     self.hparams.pos_class_weight /= 1 + self.hparams.pos_class_weight  # RT: Calculating alpha for focal loss, alpha should be between 0-1
 
         self.loss = self.get_loss()
-        if self.hparams.f1_threshold:
-            self.train_f1 = torchmetrics.F1Score("binary", threshold=self.hparams.f1_threshold)
-        else:
-            self.train_f1 = torchmetrics.F1Score("binary")
+        threshold = self.hparams.f1_threshold if self.hparams.f1_threshold is not None else 0.5
+        print("\n Using Threshold in metric calculation: {threshold}" )
+        self.train_f1 = torchmetrics.F1Score("binary", threshold=threshold)
+
+        # if self.hparams.f1_threshold:
+            # self.train_f1 = torchmetrics.F1Score("binary", threshold=self.hparams.f1_threshold)
+        # else:
+        #     self.train_f1 = torchmetrics.F1Score("binary")
         self.val_f1 = self.train_f1.clone()
         self.test_f1 = self.train_f1.clone()
-        
 
-        self.test_avg_precision = torchmetrics.AveragePrecision("binary")
+        self.train_avg_precision = torchmetrics.AveragePrecision("binary")
+        self.val_avg_precision = self.train_avg_precision.clone()
+        self.test_avg_precision = self.train_avg_precision.clone()
 
-        self.val_avg_precision = self.test_avg_precision.clone()
-        self.test_precision = torchmetrics.Precision("binary")
-        self.test_recall = torchmetrics.Recall("binary")
-        self.test_iou = torchmetrics.JaccardIndex("binary")
-        self.conf_mat = torchmetrics.ConfusionMatrix("binary")
+        # self.test_avg_precision = torchmetrics.AveragePrecision("binary")
+        # self.val_avg_precision = self.test_avg_precision.clone()
+        self.test_precision = torchmetrics.Precision("binary", threshold=threshold)
+        self.test_recall = torchmetrics.Recall("binary", threshold=threshold)
+        self.test_iou = torchmetrics.JaccardIndex("binary",threshold=threshold)
+        self.conf_mat = torchmetrics.ConfusionMatrix("binary",threshold=threshold)
 
         # Plot PR curve at the end of training. Use fixed number of threshold to avoid the plot becoming 800MB+. 
         self.test_pr_curve = torchmetrics.PrecisionRecallCurve("binary", thresholds=100)
@@ -114,17 +143,16 @@ class BaseModel(pl.LightningModule, ABC):
         #     x, y = batch
         #     doys = None
         
-        if self.hparams.flatten_temporal_dimension:
+        if len(batch) == 3:
+            x, y, doys = batch
+        elif len(batch) == 2:
             x, y = batch
             doys = None
         else:
-            if self.hparams.temporal_position_mode in ("doy", "relative"):
-                x, y, doys = batch
-            else:
-                raise ValueError(
-                    f"Invalid temporal_position_mode='{self.hparams.temporal_position_mode}'. "
-                    "Expected 'doy' or 'relative'."
-                )
+            raise ValueError(
+                f"Unexpected batch structure with {len(batch)} elements. "
+                "Expected either (x, y) or (x, y, doys)."
+            )
 
 
         # If the model requires a certain fixed size, perform repeated inference on crops of the image,
@@ -134,33 +162,35 @@ class BaseModel(pl.LightningModule, ABC):
         # by simply overwriting the existing predictions with the new ones. 
 
         if self.hparams.required_img_size is not None:
-            B, T, C, H, W = x.shape
+            if x.ndim == 5:
+                B, _, _, H, W = x.shape
+            elif x.ndim == 4:
+                B, _, H, W = x.shape
+            else:
+                raise ValueError(
+                    f"Expected 4D or 5D input for repeated cropping, got shape {tuple(x.shape)}."
+                )
 
             if x.shape[-2:] != self.hparams.required_img_size:
                 if B != 1:
                     raise ValueError(
                         "Not implemented: repeated cropping for batch size > 1."
                     )
-                # Use crops of size H_rq x W_rq
                 H_req, W_req = self.hparams.required_img_size
 
                 n_H = math.ceil(H / H_req)
                 n_W = math.ceil(W / W_req)
 
-                # Aggregate predictions in this tensor
                 agg_output = torch.zeros(B, H, W, device=self.device)
 
                 for i in range(n_H):
                     for j in range(n_W):
-                        
-                        # If we reach the bottom edge of the image, align the crop window with the bottom edge of the image
                         if i == n_H - 1:
                             H1 = H - H_req
                             H2 = H
                         else:
                             H1 = i * H_req
                             H2 = (i + 1) * H_req
-                        # If we reach the right edge of the image, align the crop window with the right edge of the image
                         if j == n_W - 1:
                             W1 = W - W_req
                             W2 = W
@@ -168,7 +198,10 @@ class BaseModel(pl.LightningModule, ABC):
                             W1 = j * W_req
                             W2 = (j + 1) * W_req
 
-                        x_crop = x[:, :, :, H1:H2, W1:W2]
+                        if x.ndim == 5:
+                            x_crop = x[:, :, :, H1:H2, W1:W2]
+                        else:
+                            x_crop = x[:, :, H1:H2, W1:W2]
 
                         agg_output[:, H1:H2, W1:W2] = self(x_crop, doys).squeeze(1)
 
@@ -208,16 +241,33 @@ class BaseModel(pl.LightningModule, ABC):
             _type_: _description_
         """
         y_hat, y = self.get_pred_and_gt(batch)
+        # print("y_hat statistics")
+        # print(y_hat.min().item(), y_hat.max().item(), y.float().mean().item())
+
 
         if self.hparams.crop_before_eval:
             #print("Center cropping before eval...")
             y_hat, y = self.center_crop(y_hat, y)
 
         loss = self.compute_loss(y_hat, y)
-        f1 = self.train_f1(y_hat, y)
+        if not torch.isfinite(loss):
+            print("Non-finite loss", loss)
+
+        self.train_f1(y_hat, y)
+        self.train_avg_precision(y_hat, y)
         self.log(
             "train_loss",
-            loss.item(),
+            # loss.item(),
+            loss,
+            on_step=True,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
+            sync_dist=True,
+        )
+        self.log(
+            "train_avg_precision",
+            self.train_avg_precision,
             on_step=True,
             on_epoch=True,
             prog_bar=True,
@@ -231,6 +281,7 @@ class BaseModel(pl.LightningModule, ABC):
             on_epoch=True,
             prog_bar=True,
             logger=True,
+            sync_dist=True,
         )
         return loss
 
@@ -251,11 +302,12 @@ class BaseModel(pl.LightningModule, ABC):
 
         loss = self.compute_loss(y_hat, y)
         # changing to val ap to match test metric
-        ap = self.val_avg_precision(y_hat, y)
-        f1 = self.val_f1(y_hat, y)
+        self.val_avg_precision(y_hat, y)
+        self.val_f1(y_hat, y)
         self.log(
             "val_loss",
-            loss.item(),
+            loss,
+            # loss.item(),
             on_step=False,
             on_epoch=True,
             prog_bar=True,
@@ -269,6 +321,7 @@ class BaseModel(pl.LightningModule, ABC):
             on_epoch=True,
             prog_bar=True,
             logger=True,
+            sync_dist=True,
         )
         self.log(
             "val_f1",
@@ -277,6 +330,7 @@ class BaseModel(pl.LightningModule, ABC):
             on_epoch=True,
             prog_bar=True,
             logger=True,
+            sync_dist=True,
         )  
         return loss
 
@@ -304,9 +358,16 @@ class BaseModel(pl.LightningModule, ABC):
         self.test_pr_curve.update(y_hat, y)
         self.conf_mat.update(y_hat, y)
 
-        self.log("test_loss", loss.item(), sync_dist=True)
-        if loss is not None:
-            self.log("test_loss", loss.item(), on_step=False, on_epoch=True)
+        self.log(
+            "test_loss",
+            # loss.item(),
+            loss,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=True,
+            logger=True,
+            sync_dist=True,
+        )
         self.log_dict(
             {
                 "test_f1": self.test_f1,
@@ -315,7 +376,12 @@ class BaseModel(pl.LightningModule, ABC):
                 "test_recall": self.test_recall,
                 "test_iou": self.test_iou,
 
-            }
+            },
+            on_step=False,
+            on_epoch=True,
+            prog_bar=False,
+            logger=True,
+            sync_dist=True,
         )
         return loss
 
@@ -328,9 +394,6 @@ class BaseModel(pl.LightningModule, ABC):
         #)
         #wandb.log({"Test confusion matrix": wandb_table})
 
-        fig, ax = self.test_pr_curve.plot(score=True)
-
-        # # Compute precision and recall
         precision, recall, thresholds = self.test_pr_curve.compute()
 
         # # Move tensors to CPU
@@ -342,8 +405,7 @@ class BaseModel(pl.LightningModule, ABC):
         np.savez(output_npz_path, precision=precision, recall=recall, thresholds=thresholds)
 
 
-        # # Plot the PR curve using Matplotlib
-        fig, ax = plt.subplots() 
+        fig, ax = plt.subplots()
         ax.plot(recall, precision, marker='.')
         ax.set_xlabel('Recall')
         ax.set_ylabel('Precision')
@@ -356,18 +418,34 @@ class BaseModel(pl.LightningModule, ABC):
         plt.close(fig)
 
     def predict_step(self, batch, batch_idx, dataloader_idx=0):
-        x, y = batch
-        
-        x_af = x[:, -1, :, :]
-        y_hat = self(x).squeeze(1)
+        if len(batch) == 3:
+            x, y, doys = batch
+        elif len(batch) == 2:
+            x, y = batch
+            doys = None
+        else:
+            raise ValueError(
+                f"Unexpected batch structure with {len(batch)} elements. "
+                "Expected either (x, y) or (x, y, doys)."
+            )
+
+        if x.ndim == 5:
+            x_af = x[:, -1, -1, :, :]
+        elif x.ndim == 4:
+            x_af = x[:, -1, :, :]
+        else:
+            raise ValueError(f"Unexpected input shape in predict_step: {tuple(x.shape)}")
+
+        y_hat = self(x, doys).squeeze(1)
         return x_af, y, y_hat
 
     def get_loss(self):
         if self.hparams.loss_function == "BCE":
             return nn.BCEWithLogitsLoss(
-                pos_weight=torch.Tensor(
-                    [self.hparams.pos_class_weight], device=self.device
-                )
+                pos_weight=torch.tensor([self.hparams.pos_class_weight])
+                # pos_weight=torch.Tensor(
+                #     [self.hparams.pos_class_weight], device=self.device
+                # )
             )
         elif self.hparams.loss_function == "Focal":
             return sigmoid_focal_loss
@@ -378,13 +456,27 @@ class BaseModel(pl.LightningModule, ABC):
         elif self.hparams.loss_function == "Dice":
             return DiceLoss(mode="binary")
 
+    # def compute_loss(self, y_hat, y):
+    #     if self.hparams.loss_function == "Focal":
+    #         alpha = self.hparams.alpha_focal if self.hparams.alpha_focal is not None else 0.25
+    #         return self.loss(
+    #             y_hat,
+    #             y.float(),
+    #             alpha=alpha,
+    #             gamma=2,
+    #             reduction="mean",
+    #         )
+    #     else:
+    #         return self.loss(y_hat, y.float())
+        
+
     def compute_loss(self, y_hat, y):
         if self.hparams.loss_function == "Focal":
             return self.loss(
                 y_hat,
                 y.float(),
-                #alpha=self.hparams.alpha_focal,
-                alpha=1 - self.hparams.pos_class_weight,
+                alpha=self.hparams.alpha_focal, #RT
+                # alpha=1 - self.hparams.pos_class_weight, 
                 gamma=2,
                 reduction="mean",
             )

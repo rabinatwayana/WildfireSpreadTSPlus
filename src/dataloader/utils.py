@@ -18,9 +18,9 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
         _type_: _description_
     """
     if do_cross_year_experiment:
-        print("usingggggggggggggggg cross years")
+        print("Using cross years experiment related stats")
         stats_per_training_year_combo={
-            (2016,): {
+           (2016,): {
                 "means": np.array([
                     2293.520605939562,
                     3182.756620210786,
@@ -44,7 +44,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     -2.785884775762982,
                     16.801786999203497,
                     0.005719840036055262,
-                    0.0,
+                    0.024256281167150333,
                 ], dtype=np.float32),
                 "stds": np.array([
                     1041.616207652958,
@@ -69,7 +69,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     52.85351455272566,
                     6.497999275123675,
                     0.00248772814020855,
-                    0.0,
+                    0.6572790210315385,
                 ], dtype=np.float32),
                 "missing_values": np.array([
                     0.00920005018547185,
@@ -95,7 +95,10 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     0.0,
                     0.0,
                     0.0,
-                ], dtype=np.float32)
+                ], dtype=np.float32),
+                    "fire_pixels": 226930,
+                    "non_fire_pixels": 154160380,
+                    "pos_class_weight": 679.3301017935046,
                 },
 
                 (2017,): {
@@ -122,7 +125,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     0.7245071736574918,
                     20.318766984757755,
                     0.00626632031441219,
-                    0.0,
+                    0.011967366624089988,
                 ], dtype=np.float32),
                 "stds": np.array([
                     1126.314855607258,
@@ -147,7 +150,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     47.50693638851419,
                     6.897517618876118,
                     0.002442808902921483,
-                    0.0,
+                    0.445182211917486,
                 ], dtype=np.float32),
                 "missing_values": np.array([
                     0.004007527164733157,
@@ -173,7 +176,10 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     0.0,
                     0.0,
                     0.0,
-                ], dtype=np.float32)
+                ], dtype=np.float32),
+                    "fire_pixels": 135632,
+                    "non_fire_pixels": 164167933,
+                    "pos_class_weight": 1210.3923336675712,
                 },
 
                 (2018,): {
@@ -200,7 +206,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     4.922537657986506,
                     18.196726378966265,
                     0.005369285187001862,
-                    0.018208319455844415,
+                    0.018335502823677005,
                 ], dtype=np.float32),
                 "stds": np.array([
                     1136.103735471544,
@@ -225,7 +231,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     46.45507416267113,
                     6.642277048183648,
                     0.0017000110931874469,
-                    0.5540274372204248,
+                    0.5574574763158285,
                 ], dtype=np.float32),
                 "missing_values": np.array([
                     0.017618341890337577,
@@ -251,7 +257,10 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     0.0,
                     0.0,
                     0.0,
-                ], dtype=np.float32)
+                ], dtype=np.float32),
+                    "fire_pixels": 251506,
+                    "non_fire_pixels": 204366444,
+                    "pos_class_weight": 812.5708492043927,
                 },
 
                 (2019,): {
@@ -278,7 +287,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     15.332908046861442,
                     18.278138526458445,
                     0.005773314877849288,
-                    0.005755832822844719,
+                    0.005790011022787596,
                 ], dtype=np.float32),
                 "stds": np.array([
                     1066.0648182393659,
@@ -303,7 +312,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     42.068034431241564,
                     8.383706298695742,
                     0.0023042333173831876,
-                    0.31778198246841544,
+                    0.3194508878798004,
                 ], dtype=np.float32),
                 "missing_values": np.array([
                     0.049284124495887455,
@@ -329,7 +338,10 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     0.0,
                     0.0,
                     0.0,
-                ], dtype=np.float32)
+                ], dtype=np.float32),
+                    "fire_pixels": 29056,
+                    "non_fire_pixels": 78559050,
+                    "pos_class_weight": 2703.711797907489,
                 },
 
                 (2020,): {
@@ -356,7 +368,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     9.072293308416453,
                     18.198069016415992,
                     0.0051898622671828955,
-                    0.030608402151817253,
+                    0.030787241568455786,
                 ], dtype=np.float32),
                 "stds": np.array([
                     1125.025128156626,
@@ -381,7 +393,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     44.581860155442854,
                     8.046716661828285,
                     0.001974046555666917,
-                    0.7172591450618021,
+                    0.7211382813913939,
                 ], dtype=np.float32),
                 "missing_values": np.array([
                     0.020212856627650357,
@@ -407,7 +419,10 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     0.0,
                     0.0,
                     0.0,
-                ], dtype=np.float32)
+                ], dtype=np.float32),
+                    "fire_pixels": 503067,
+                    "non_fire_pixels": 242592112,
+                    "pos_class_weight": 482.2262481935806,
                 },
 
                 (2021,): {
@@ -434,7 +449,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     1.6598344482540264,
                     18.396555711308842,
                     0.00553422593479688,
-                    0.034851510259669746,
+                    0.03510194090792947,
                 ], dtype=np.float32),
                 "stds": np.array([
                     1216.1585212581208,
@@ -459,7 +474,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     43.53706647046416,
                     6.320617701674513,
                     0.0016038623698278903,
-                    0.7628387565980166,
+                    0.7678213745823951,
                 ], dtype=np.float32),
                 "missing_values": np.array([
                     0.11036780348293065,
@@ -485,7 +500,10 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     0.0,
                     0.0,
                     0.0,
-                ], dtype=np.float32)
+                ], dtype=np.float32),
+                    "fire_pixels": 524298,
+                    "non_fire_pixels": 220339244,
+                    "pos_class_weight": 420.2557400562276,
                 },
 
                 (2022,): {
@@ -512,7 +530,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     0.8399730859055751,
                     17.705587884535596,
                     0.006865448166544609,
-                    0.0,
+                    0.0039551830032554525,
                 ], dtype=np.float32),
                 "stds": np.array([
                     1228.4959562720196,
@@ -537,7 +555,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     54.81540088896352,
                     6.604730933212671,
                     0.0030957488369464966,
-                    0.0,
+                    0.2563612861566473,
                 ], dtype=np.float32),
                 "missing_values": np.array([
                     0.00045292358796588316,
@@ -563,7 +581,10 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     0.0,
                     0.0,
                     0.0,
-                ], dtype=np.float32)
+                ], dtype=np.float32),
+                    "fire_pixels": 84194,
+                    "non_fire_pixels": 307066954,
+                    "pos_class_weight": 3647.135829156472,
                 },
 
                 (2023,): {
@@ -590,7 +611,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     2.046048947566423,
                     19.62781067173617,
                     0.006572623753700032,
-                    0.0,
+                    0.011367384737386448,
                 ], dtype=np.float32),
                 "stds": np.array([
                     1250.0765086534507,
@@ -615,7 +636,7 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     44.76170512384822,
                     5.6120704470476435,
                     0.0017505629148781613,
-                    0.0,
+                    0.43820299913247046,
                 ], dtype=np.float32),
                 "missing_values": np.array([
                     0.013078996547026947,
@@ -641,7 +662,10 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
                     0.0,
                     0.0,
                     0.0,
-                ], dtype=np.float32)
+                ], dtype=np.float32),
+                    "fire_pixels": 106317,
+                    "non_fire_pixels": 139190455,
+                    "pos_class_weight": 1309.2022442318726,
                 }
         }
         
@@ -3778,10 +3802,16 @@ def get_means_stds_missing_values(training_years: List[int], do_cross_year_exper
 
 
     years_tuple = tuple(training_years)
-    print(years_tuple, "years_tupleyears_tupleyears_tupleyears_tupleyears_tuple")
+    # print(years_tuple, "years_tupleyears_tupleyears_tupleyears_tupleyears_tuple")
     means = stats_per_training_year_combo[years_tuple]["means"]
     stds = stats_per_training_year_combo[years_tuple]["stds"]
     missing_values = stats_per_training_year_combo[years_tuple]["missing_values"]
+
+    if do_cross_year_experiment:
+        print("computing missing_values for pos_class_weight, cross-year experimentation")
+        non_fire_pixels=stats_per_training_year_combo[years_tuple]["non_fire_pixels"]
+        fire_pixels=stats_per_training_year_combo[years_tuple]["fire_pixels"]
+        missing_values = np.array([non_fire_pixels/(non_fire_pixels+fire_pixels)])
 
     # Zero out means and stds for degree-based features and the categorical land cover type variable
     features_to_not_standardize = get_indices_of_degree_features() + [16]
