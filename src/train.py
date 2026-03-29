@@ -106,10 +106,7 @@ class MyLightningCLI(LightningCLI):
         wandb.define_metric("val_avg_precision", summary="max")
         wandb.define_metric("train_avg_precision_epoch", summary="max")
 
-
-
 def main():
-
     # LightningCLI automatically creates an argparse parser with required arguments and types,
     # and instantiates the model and datamodule. For this, it's important to import the model and datamodule classes above.
     cli = MyLightningCLI(BaseModel, FireSpreadDataModule, subclass_mode_model=True, save_config_kwargs={

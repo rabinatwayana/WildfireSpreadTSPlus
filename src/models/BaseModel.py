@@ -70,6 +70,8 @@ class BaseModel(pl.LightningModule, ABC):
         self.save_hyperparameters()
         print("Using temporal_position_mode = ",self.hparams.temporal_position_mode)
         print("Using loss function = ",self.hparams.loss_function)
+        print("Using positive class weight = ",self.hparams.pos_class_weight)
+
 
         # self.hparams.use_doy = use_doy #RT: As use_doy was not retained.
         # self.hparams.temporal_position_mode=temporal_position_mode
@@ -89,7 +91,7 @@ class BaseModel(pl.LightningModule, ABC):
 
         self.loss = self.get_loss()
         threshold = self.hparams.f1_threshold if self.hparams.f1_threshold is not None else 0.5
-        print("\n Using Threshold in metric calculation: {threshold}" )
+        print(f"\n Using Threshold in metric calculation: {threshold}" )
         self.train_f1 = torchmetrics.F1Score("binary", threshold=threshold)
 
         # if self.hparams.f1_threshold:
