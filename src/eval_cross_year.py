@@ -1,5 +1,6 @@
 import argparse
 import csv
+import json
 import os
 from pathlib import Path
 
@@ -20,8 +21,14 @@ def parse_args():
     parser.add_argument(
         "--checkpoint_csv",
         type=str,
-        required=True,
-        help="CSV with columns: train_year,ckpt_path",
+        default=None,
+        help="Optional CSV with columns: train_year,ckpt_path",
+    )
+    parser.add_argument(
+        "--checkpoint_json",
+        type=str,
+        default=None,
+        help="Optional JSON mapping train year to checkpoint path.",
     )
     parser.add_argument(
         "--train_years",
@@ -36,9 +43,9 @@ def parse_args():
         help='Comma-separated test years, e.g. "2016,2017,2018,2019,2020,2021,2022,2023"',
     )
     parser.add_argument("--output_csv", type=str, required=True, help="Where to save the result table CSV.")
-    parser.add_argument("--accelerator", type=str, default="cpu", help="Lightning accelerator override.")
-    parser.add_argument("--devices", type=str, default="1", help="Lightning devices override.")
-    parser.add_argument("--num_workers", type=str, default="0", help="DataLoader workers override.")
+    # parser.add_argument("--accelerator", type=str, default="cpu", help="Lightning accelerator override.")
+    # parser.add_argument("--devices", type=str, default="1", help="Lightning devices override.")
+    # parser.add_argument("--num_workers", type=str, default="0", help="DataLoader workers override.")
     parser.add_argument(
         "--disable_wandb",
         action="store_true",
@@ -47,18 +54,31 @@ def parse_args():
     return parser.parse_args()
 
 
-def load_checkpoint_map(path: Path):
+# def load_checkpoint_map(path: Path):
+#     mapping = {}
+#     with open(path, "r", encoding="utf-8", newline="") as f:
+#         reader = csv.DictReader(f)
+#         required = {"train_year", "ckpt_path"}
+#         missing = required.difference(reader.fieldnames or [])
+#         if missing:
+#             raise ValueError(
+#                 f"checkpoint CSV missing required columns {sorted(missing)}; found {reader.fieldnames}"
+#             )
+#         for row in reader:
+#             mapping[int(row["train_year"])] = row["ckpt_path"]
+#     return mapping
+
+
+def load_checkpoint_map_json(path: Path):
+    with open(path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    if not isinstance(data, dict):
+        raise ValueError("checkpoint JSON must be an object mapping train year to ckpt path.")
+
     mapping = {}
-    with open(path, "r", encoding="utf-8", newline="") as f:
-        reader = csv.DictReader(f)
-        required = {"train_year", "ckpt_path"}
-        missing = required.difference(reader.fieldnames or [])
-        if missing:
-            raise ValueError(
-                f"checkpoint CSV missing required columns {sorted(missing)}; found {reader.fieldnames}"
-            )
-        for row in reader:
-            mapping[int(row["train_year"])] = row["ckpt_path"]
+    for key, value in data.items():
+        mapping[int(key)] = value
     return mapping
 
 
@@ -90,12 +110,12 @@ def build_cli_args(args, train_year: int, test_year: int, ckpt_path: str):
         str(train_year),
         "--data.cross_year_eval_id",
         str(test_year),
-        "--trainer.accelerator",
-        args.accelerator,
-        "--trainer.devices",
-        args.devices,
-        "--data.num_workers",
-        args.num_workers,
+        # "--trainer.accelerator",
+        # args.accelerator,
+        # "--trainer.devices",
+        # args.devices,
+        # "--data.num_workers",
+        # args.num_workers,
     ]
 
 
@@ -120,7 +140,17 @@ def main():
     if args.disable_wandb:
         os.environ["WANDB_MODE"] = "disabled"
 
-    checkpoint_map = load_checkpoint_map(Path(args.checkpoint_csv).expanduser().resolve())
+    if bool(args.checkpoint_csv) == bool(args.checkpoint_json):
+        raise ValueError("Provide exactly one of --checkpoint_csv or --checkpoint_json.")
+
+    if args.checkpoint_json:
+        checkpoint_map = load_checkpoint_map_json(
+            Path(args.checkpoint_json).expanduser().resolve()
+        )
+    # else:
+    #     checkpoint_map = load_checkpoint_map(
+    #         Path(args.checkpoint_csv).expanduser().resolve()
+    #     )
     train_years = [int(x.strip()) for x in args.train_years.split(",") if x.strip()]
     test_years = [int(x.strip()) for x in args.test_years.split(",") if x.strip()]
 
@@ -134,7 +164,7 @@ def main():
             print(f"Evaluating train_year={train_year} on test_year={test_year}")
             cli_args = build_cli_args(args, train_year, test_year, ckpt_path)
             metrics = evaluate_pair(cli_args)
-            row[str(test_year)] = metrics.get("test_AP")
+            row[str(test_year)] = round(metrics.get("test_AP"), 6)
         ap_values = [row[str(year)] for year in test_years]
         row["Avg"] = sum(ap_values) / len(ap_values)
         rows.append(row)
@@ -148,7 +178,6 @@ def main():
         writer.writerows(rows)
 
     print(f"Saved cross-year results to {output_path}")
-
 
 if __name__ == "__main__":
     main()

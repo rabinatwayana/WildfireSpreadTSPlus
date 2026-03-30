@@ -1,0 +1,10 @@
+{
+    "2016":"/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016/wildfire_progression/sb81gofz/checkpoints/best-epoch=9-val_avg_precision=0.01.ckpt",
+    "2017":"/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017/wildfire_progression/5jy319f4/checkpoints/best-epoch=40-val_avg_precision=0.43.ckpt",
+    "2018":"/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2018/wildfire_progression/vwl3bnk4/checkpoints/best-epoch=19-val_avg_precision=0.59.ckpt",
+    "2019":"/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2019/wildfire_progression/p0n13f8n/checkpoints/best-epoch=17-val_avg_precision=0.35.ckpt",
+    "2020":"/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2020/wildfire_progression/7a9wnl0b/checkpoints/best-epoch=18-val_avg_precision=0.39.ckpt",
+    "2021":"/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2021/wildfire_progression/om99y8t6/checkpoints/best-epoch=69-val_avg_precision=0.65.ckpt",
+    "2022":"/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022/wildfire_progression/0zngb9tk/checkpoints/best-epoch=10-val_avg_precision=0.00.ckpt",
+    "2023":"/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023/wildfire_progression/8bycz1b7/checkpoints/best-epoch=10-val_avg_precision=0.00.ckpt"
+}
