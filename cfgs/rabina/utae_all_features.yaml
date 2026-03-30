@@ -11,7 +11,7 @@ model:
     n_channels: 40
     temporal_position_mode: "relative"
     pos_class_weight: 50
-    loss_function: "Dice"
+    loss_function: "Focal"
     encoder_weights: pastis
     pretrained_checkpoint_path: "/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar" #this is used when encoder_weight=Pastis
 do_train: true
