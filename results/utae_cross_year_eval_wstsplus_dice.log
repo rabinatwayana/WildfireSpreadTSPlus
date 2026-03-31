@@ -1,0 +1,1526 @@
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/timm/models/layers/__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2016', '--data.cross_year_eval_id', '2016'].
+Seed set to 0
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/lightning_fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/eval_cross_year.py --config cfgs/rabina/utae_all ...
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+wandb: WARNING The anonymous setting has no effect and will be removed in a future version.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:566: The dirpath has changed from './lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints' to './lightning_logs/wildfire_progression/l1ajor40/checkpoints', therefore `best_model_score`, `kth_best_model_path`, `kth_value`, `last_model_path` and `best_k_models` won't be reloaded. Only `best_model_path` will be reloaded.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/utilities/_pytree.py:21: `isinstance(treespec, LeafSpec)` is deprecated, use `isinstance(treespec, TreeSpec) and treespec.is_leaf()` instead.
+Evaluating train_year=2016 on test_year=2016
+=============train.py===================
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0014698746937167328
+ 
+ Computed pos_class_weight = 680.3301017935038
+ 
+ Using pos_class_weight after clamping = 680.3301017935038
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  680.3301017935038
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2016, Eval year: 2016
+Train events: 64, Val events: 14, Test events: 14
+Loading HDF5 files
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/torchmetrics/utilities/prints.py:43: UserWarning: No positive samples found in target, recall is undefined. Setting recall to one for all thresholds.
+  warnings.warn(*args, **kwargs)
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.16918691992759705    │
+│          test_f1          │    0.08897770196199417    │
+│         test_iou          │    0.04656026139855385    │
+│         test_loss         │   0.022657180204987526    │
+│      test_precision       │    0.04723791405558586    │
+│        test_recall        │    0.7644636631011963     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 251/251 0:00:21 • 0:00:00 12.20it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2016', '--data.cross_year_eval_id', '2017'].
+Seed set to 0
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/lightning_fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/eval_cross_year.py --config cfgs/rabina/utae_all ...
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/loggers/wandb.py:400: There is a wandb run already in progress and newly created instances of `WandbLogger` will reuse this run. If this is not desired, call `wandb.finish()` before instantiating `WandbLogger`.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+Evaluating train_year=2016 on test_year=2017
+=============train.py===================
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0014698746937167328
+ 
+ Computed pos_class_weight = 680.3301017935038
+ 
+ Using pos_class_weight after clamping = 680.3301017935038
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  680.3301017935038
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2016, Eval year: 2017
+Train events: 64, Val events: 14, Test events: 17
+Loading HDF5 files
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.06666871905326843    │
+│          test_f1          │    0.10445316880941391    │
+│         test_iou          │    0.05510450527071953    │
+│         test_loss         │   0.014619673602283001    │
+│      test_precision       │    0.05777375400066376    │
+│        test_recall        │     0.543940007686615     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 305/305 0:00:26 • 0:00:00 11.72it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2016', '--data.cross_year_eval_id', '2018'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+Evaluating train_year=2016 on test_year=2018
+=============train.py===================
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0014698746937167328
+ 
+ Computed pos_class_weight = 680.3301017935038
+ 
+ Using pos_class_weight after clamping = 680.3301017935038
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  680.3301017935038
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2016, Eval year: 2018
+Train events: 64, Val events: 14, Test events: 27
+Loading HDF5 files
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.30476269125938416    │
+│          test_f1          │    0.13866594433784485    │
+│         test_iou          │    0.07449815422296524    │
+│         test_loss         │    0.03657716512680054    │
+│      test_precision       │    0.07511842995882034    │
+│        test_recall        │    0.9002199172973633     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 481/481 0:00:40 • 0:00:00 11.64it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2016', '--data.cross_year_eval_id', '2019'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+Evaluating train_year=2016 on test_year=2019
+=============train.py===================
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0014698746937167328
+ 
+ Computed pos_class_weight = 680.3301017935038
+ 
+ Using pos_class_weight after clamping = 680.3301017935038
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  680.3301017935038
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2016, Eval year: 2019
+Train events: 64, Val events: 14, Test events: 12
+Loading HDF5 files
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.22389957308769226    │
+│          test_f1          │    0.11419916152954102    │
+│         test_iou          │    0.06055738031864166    │
+│         test_loss         │    0.01908814162015915    │
+│      test_precision       │   0.061414267867803574    │
+│        test_recall        │    0.8127422332763672     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 163/163 0:00:13 • 0:00:00 12.22it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2016', '--data.cross_year_eval_id', '2020'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+Evaluating train_year=2016 on test_year=2020
+=============train.py===================
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0014698746937167328
+ 
+ Computed pos_class_weight = 680.3301017935038
+ 
+ Using pos_class_weight after clamping = 680.3301017935038
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  680.3301017935038
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2016, Eval year: 2020
+Train events: 64, Val events: 14, Test events: 31
+Loading HDF5 files
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.24252043664455414    │
+│          test_f1          │    0.16907814145088196    │
+│         test_iou          │    0.09234590828418732    │
+│         test_loss         │   0.024411281570792198    │
+│      test_precision       │    0.09484587609767914    │
+│        test_recall        │    0.7779500484466553     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 462/462 0:00:38 • 0:00:00 11.77it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2016', '--data.cross_year_eval_id', '2021'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+Evaluating train_year=2016 on test_year=2021
+=============train.py===================
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0014698746937167328
+ 
+ Computed pos_class_weight = 680.3301017935038
+ 
+ Using pos_class_weight after clamping = 680.3301017935038
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  680.3301017935038
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2016, Eval year: 2021
+Train events: 64, Val events: 14, Test events: 24
+Loading HDF5 files
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.35953837633132935    │
+│          test_f1          │    0.1405259221792221     │
+│         test_iou          │    0.07557293772697449    │
+│         test_loss         │   0.028885573148727417    │
+│      test_precision       │    0.07587212324142456    │
+│        test_recall        │    0.9504091739654541     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 494/494 0:00:41 • 0:00:00 11.59it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2016', '--data.cross_year_eval_id', '2022'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+/share/castor/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/dataloader/FireSpreadDataset.py:319: RuntimeWarning: In dataset preparation: Fire 2022: fire_ID4636111481620220831 does not contribute data points. It contains 1 images, which is too few for a lead of 5 observations.
+  warnings.warn(
+/share/castor/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/dataloader/FireSpreadDataset.py:319: RuntimeWarning: In dataset preparation: Fire 2022: fire_MT4813910968220220907 does not contribute data points. It contains 1 images, which is too few for a lead of 5 observations.
+  warnings.warn(
+/share/castor/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/dataloader/FireSpreadDataset.py:319: RuntimeWarning: In dataset preparation: Fire 2022: fire_NV4181411870020220826 does not contribute data points. It contains 1 images, which is too few for a lead of 5 observations.
+  warnings.warn(
+/share/castor/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/dataloader/FireSpreadDataset.py:319: RuntimeWarning: In dataset preparation: Fire 2022: fire_WA4594312209020220923 does not contribute data points. It contains 1 images, which is too few for a lead of 5 observations.
+  warnings.warn(
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+Evaluating train_year=2016 on test_year=2022
+=============train.py===================
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0014698746937167328
+ 
+ Computed pos_class_weight = 680.3301017935038
+ 
+ Using pos_class_weight after clamping = 680.3301017935038
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  680.3301017935038
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2016, Eval year: 2022
+Train events: 64, Val events: 14, Test events: 19
+Loading HDF5 files
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.1534590721130371     │
+│          test_f1          │    0.05386367440223694    │
+│         test_iou          │    0.02767723612487316    │
+│         test_loss         │   0.011933649890124798    │
+│      test_precision       │    0.0280334260314703     │
+│        test_recall        │    0.6853653192520142     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 446/446 0:00:37 • 0:00:00 11.74it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2016', '--data.cross_year_eval_id', '2023'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2016_dice/wildfire_progression/pgh8n88l/checkpoints/best-epoch=17-val_avg_precision=0.15.ckpt
+Evaluating train_year=2016 on test_year=2023
+=============train.py===================
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0014698746937167328
+ 
+ Computed pos_class_weight = 680.3301017935038
+ 
+ Using pos_class_weight after clamping = 680.3301017935038
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  680.3301017935038
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2016, Eval year: 2023
+Train events: 64, Val events: 14, Test events: 11
+Loading HDF5 files
+True [2016] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.29308125376701355    │
+│          test_f1          │    0.07942257821559906    │
+│         test_iou          │     0.041353490203619     │
+│         test_loss         │   0.026142941787838936    │
+│      test_precision       │   0.041476085782051086    │
+│        test_recall        │    0.9332906007766724     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 352/352 0:00:29 • 0:00:00 12.10it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2017', '--data.cross_year_eval_id', '2016'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:566: The dirpath has changed from './lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints' to './lightning_logs/wildfire_progression/l1ajor40/checkpoints', therefore `best_model_score`, `kth_best_model_path`, `kth_value`, `last_model_path` and `best_k_models` won't be reloaded. Only `best_model_path` will be reloaded.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+Evaluating train_year=2017 on test_year=2016
+=============train.py===================
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0008254963913899571
+ 
+ Computed pos_class_weight = 1211.392333667524
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2017, Eval year: 2016
+Train events: 77, Val events: 16, Test events: 14
+Loading HDF5 files
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.13318057358264923    │
+│          test_f1          │    0.1352841705083847     │
+│         test_iou          │    0.0725494846701622     │
+│         test_loss         │    0.01517118327319622    │
+│      test_precision       │    0.07796065509319305    │
+│        test_recall        │    0.5110614895820618     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 251/251 0:00:20 • 0:00:00 12.14it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2017', '--data.cross_year_eval_id', '2017'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+Evaluating train_year=2017 on test_year=2017
+=============train.py===================
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0008254963913899571
+ 
+ Computed pos_class_weight = 1211.392333667524
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2017, Eval year: 2017
+Train events: 77, Val events: 16, Test events: 17
+Loading HDF5 files
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.11345928907394409    │
+│          test_f1          │    0.14624448120594025    │
+│         test_iou          │    0.07889092713594437    │
+│         test_loss         │   0.014846373349428177    │
+│      test_precision       │    0.08198132365942001    │
+│        test_recall        │    0.6766679883003235     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 305/305 0:00:25 • 0:00:00 12.16it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2017', '--data.cross_year_eval_id', '2018'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+Evaluating train_year=2017 on test_year=2018
+=============train.py===================
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0008254963913899571
+ 
+ Computed pos_class_weight = 1211.392333667524
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2017, Eval year: 2018
+Train events: 77, Val events: 16, Test events: 27
+Loading HDF5 files
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.24838802218437195    │
+│          test_f1          │    0.18084926903247833    │
+│         test_iou          │    0.09941411763429642    │
+│         test_loss         │    0.03206875920295715    │
+│      test_precision       │    0.10064756125211716    │
+│        test_recall        │    0.8902556896209717     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 481/481 0:00:40 • 0:00:00 11.64it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2017', '--data.cross_year_eval_id', '2019'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+Evaluating train_year=2017 on test_year=2019
+=============train.py===================
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0008254963913899571
+ 
+ Computed pos_class_weight = 1211.392333667524
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2017, Eval year: 2019
+Train events: 77, Val events: 16, Test events: 12
+Loading HDF5 files
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.19983148574829102    │
+│          test_f1          │    0.17014449834823608    │
+│         test_iou          │    0.09298247843980789    │
+│         test_loss         │    0.01733524724841118    │
+│      test_precision       │    0.09515401721000671    │
+│        test_recall        │    0.8029311895370483     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 163/163 0:00:13 • 0:00:00 12.34it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2017', '--data.cross_year_eval_id', '2020'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+Evaluating train_year=2017 on test_year=2020
+=============train.py===================
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0008254963913899571
+ 
+ Computed pos_class_weight = 1211.392333667524
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2017, Eval year: 2020
+Train events: 77, Val events: 16, Test events: 31
+Loading HDF5 files
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.21028929948806763    │
+│          test_f1          │    0.18459701538085938    │
+│         test_iou          │    0.10168376564979553    │
+│         test_loss         │   0.024113548919558525    │
+│      test_precision       │    0.1051635816693306     │
+│        test_recall        │    0.7544796466827393     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 462/462 0:00:38 • 0:00:00 11.70it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2017', '--data.cross_year_eval_id', '2021'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+Evaluating train_year=2017 on test_year=2021
+=============train.py===================
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0008254963913899571
+ 
+ Computed pos_class_weight = 1211.392333667524
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2017, Eval year: 2021
+Train events: 77, Val events: 16, Test events: 24
+Loading HDF5 files
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.29076069593429565    │
+│          test_f1          │    0.17583760619163513    │
+│         test_iou          │    0.09639361500740051    │
+│         test_loss         │   0.028113216161727905    │
+│      test_precision       │    0.09691735357046127    │
+│        test_recall        │    0.9469139575958252     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 494/494 0:00:41 • 0:00:00 11.68it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2017', '--data.cross_year_eval_id', '2022'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+Evaluating train_year=2017 on test_year=2022
+=============train.py===================
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0008254963913899571
+ 
+ Computed pos_class_weight = 1211.392333667524
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2017, Eval year: 2022
+Train events: 77, Val events: 16, Test events: 19
+Loading HDF5 files
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.11727841198444366    │
+│          test_f1          │    0.07490713149309158    │
+│         test_iou          │    0.03891092166304588    │
+│         test_loss         │    0.01122328918427229    │
+│      test_precision       │    0.03992408514022827    │
+│        test_recall        │    0.6052576899528503     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 446/446 0:00:36 • 0:00:00 11.95it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2017', '--data.cross_year_eval_id', '2023'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2017_dice/wildfire_progression/uilgoxjm/checkpoints/best-epoch=33-val_avg_precision=0.25.ckpt
+Evaluating train_year=2017 on test_year=2023
+=============train.py===================
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0008254963913899571
+ 
+ Computed pos_class_weight = 1211.392333667524
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2017, Eval year: 2023
+Train events: 77, Val events: 16, Test events: 11
+Loading HDF5 files
+True [2017] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.1408170610666275     │
+│          test_f1          │    0.09835290908813477    │
+│         test_iou          │    0.05171985179185867    │
+│         test_loss         │   0.028360776603221893    │
+│      test_precision       │    0.05201873183250427    │
+│        test_recall        │    0.9000160098075867     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 352/352 0:00:29 • 0:00:00 12.01it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2022', '--data.cross_year_eval_id', '2016'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:566: The dirpath has changed from './lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints' to './lightning_logs/wildfire_progression/l1ajor40/checkpoints', therefore `best_model_score`, `kth_best_model_path`, `kth_value`, `last_model_path` and `best_k_models` won't be reloaded. Only `best_model_path` will be reloaded.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+Evaluating train_year=2022 on test_year=2016
+=============train.py===================
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.00027411260074472477
+ 
+ Computed pos_class_weight = 3648.135829156131
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2022, Eval year: 2016
+Train events: 85, Val events: 18, Test events: 14
+Loading HDF5 files
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.06871046125888824    │
+│          test_f1          │    0.03422645479440689    │
+│         test_iou          │   0.017411189153790474    │
+│         test_loss         │    0.04853744059801102    │
+│      test_precision       │   0.017505571246147156    │
+│        test_recall        │    0.7635564208030701     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 251/251 0:00:20 • 0:00:00 12.26it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2022', '--data.cross_year_eval_id', '2017'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+Evaluating train_year=2022 on test_year=2017
+=============train.py===================
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.00027411260074472477
+ 
+ Computed pos_class_weight = 3648.135829156131
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2022, Eval year: 2017
+Train events: 85, Val events: 18, Test events: 17
+Loading HDF5 files
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │   0.037132978439331055    │
+│          test_f1          │    0.03837186098098755    │
+│         test_iou          │    0.01956123113632202    │
+│         test_loss         │   0.021436646580696106    │
+│      test_precision       │   0.019960474222898483    │
+│        test_recall        │    0.4944334924221039     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 305/305 0:00:25 • 0:00:00 12.01it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2022', '--data.cross_year_eval_id', '2018'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+Evaluating train_year=2022 on test_year=2018
+=============train.py===================
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.00027411260074472477
+ 
+ Computed pos_class_weight = 3648.135829156131
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2022, Eval year: 2018
+Train events: 85, Val events: 18, Test events: 27
+Loading HDF5 files
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.26240643858909607    │
+│          test_f1          │    0.1533840000629425     │
+│         test_iou          │    0.08306220173835754    │
+│         test_loss         │    0.03804527223110199    │
+│      test_precision       │    0.08393477648496628    │
+│        test_recall        │    0.8887641429901123     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 481/481 0:00:40 • 0:00:00 11.53it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2022', '--data.cross_year_eval_id', '2019'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+Evaluating train_year=2022 on test_year=2019
+=============train.py===================
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.00027411260074472477
+ 
+ Computed pos_class_weight = 3648.135829156131
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2022, Eval year: 2019
+Train events: 85, Val events: 18, Test events: 12
+Loading HDF5 files
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.12573052942752838    │
+│          test_f1          │    0.10446213185787201    │
+│         test_iou          │    0.05510949343442917    │
+│         test_loss         │   0.019450785592198372    │
+│      test_precision       │        0.056640625        │
+│        test_recall        │    0.6709060072898865     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 163/163 0:00:13 • 0:00:00 12.48it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2022', '--data.cross_year_eval_id', '2020'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+Evaluating train_year=2022 on test_year=2020
+=============train.py===================
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.00027411260074472477
+ 
+ Computed pos_class_weight = 3648.135829156131
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2022, Eval year: 2020
+Train events: 85, Val events: 18, Test events: 31
+Loading HDF5 files
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.2260245829820633     │
+│          test_f1          │    0.1350323110818863     │
+│         test_iou          │    0.0724046379327774     │
+│         test_loss         │   0.030897367745637894    │
+│      test_precision       │    0.07392650842666626    │
+│        test_recall        │    0.7786201238632202     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 462/462 0:00:38 • 0:00:00 11.76it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2022', '--data.cross_year_eval_id', '2021'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+Evaluating train_year=2022 on test_year=2021
+=============train.py===================
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.00027411260074472477
+ 
+ Computed pos_class_weight = 3648.135829156131
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2022, Eval year: 2021
+Train events: 85, Val events: 18, Test events: 24
+Loading HDF5 files
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.32260313630104065    │
+│          test_f1          │    0.14093205332756042    │
+│         test_iou          │    0.07580790668725967    │
+│         test_loss         │   0.034421566873788834    │
+│      test_precision       │    0.07603684812784195    │
+│        test_recall        │    0.9617994427680969     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 494/494 0:00:41 • 0:00:00 11.59it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2022', '--data.cross_year_eval_id', '2022'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+Evaluating train_year=2022 on test_year=2022
+=============train.py===================
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.00027411260074472477
+ 
+ Computed pos_class_weight = 3648.135829156131
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2022, Eval year: 2022
+Train events: 85, Val events: 18, Test events: 19
+Loading HDF5 files
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.09873729944229126    │
+│          test_f1          │    0.03395349159836769    │
+│         test_iou          │   0.017269933596253395    │
+│         test_loss         │   0.015025223605334759    │
+│      test_precision       │   0.017397776246070862    │
+│        test_recall        │    0.7015110850334167     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 446/446 0:00:37 • 0:00:00 11.88it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2022', '--data.cross_year_eval_id', '2023'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2022_dice/wildfire_progression/sqomdbls/checkpoints/best-epoch=16-val_avg_precision=0.04.ckpt
+Evaluating train_year=2022 on test_year=2023
+=============train.py===================
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.00027411260074472477
+ 
+ Computed pos_class_weight = 3648.135829156131
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2022, Eval year: 2023
+Train events: 85, Val events: 18, Test events: 11
+Loading HDF5 files
+True [2022] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.27408066391944885    │
+│          test_f1          │    0.12020739912986755    │
+│         test_iou          │    0.0639471560716629     │
+│         test_loss         │   0.023540325462818146    │
+│      test_precision       │    0.06424789130687714    │
+│        test_recall        │    0.9317951202392578     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 352/352 0:00:29 • 0:00:00 12.14it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2023', '--data.cross_year_eval_id', '2016'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/callbacks/model_checkpoint.py:566: The dirpath has changed from './lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints' to './lightning_logs/wildfire_progression/l1ajor40/checkpoints', therefore `best_model_score`, `kth_best_model_path`, `kth_value`, `last_model_path` and `best_k_models` won't be reloaded. Only `best_model_path` will be reloaded.
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+Evaluating train_year=2023 on test_year=2016
+=============train.py===================
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.000763240945741317
+ 
+ Computed pos_class_weight = 1310.2022442319637
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2023, Eval year: 2016
+Train events: 47, Val events: 10, Test events: 14
+Loading HDF5 files
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.07738874107599258    │
+│          test_f1          │    0.05039259046316147    │
+│         test_iou          │   0.025847557932138443    │
+│         test_loss         │    0.01974579319357872    │
+│      test_precision       │   0.026538213714957237    │
+│        test_recall        │    0.49829018115997314    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 251/251 0:00:20 • 0:00:00 12.27it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2023', '--data.cross_year_eval_id', '2017'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+Evaluating train_year=2023 on test_year=2017
+=============train.py===================
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.000763240945741317
+ 
+ Computed pos_class_weight = 1310.2022442319637
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2023, Eval year: 2017
+Train events: 47, Val events: 10, Test events: 17
+Loading HDF5 files
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │   0.029159976169466972    │
+│          test_f1          │    0.04438554495573044    │
+│         test_iou          │   0.022696470841765404    │
+│         test_loss         │    0.01632871851325035    │
+│      test_precision       │    0.02339351177215576    │
+│        test_recall        │    0.43237268924713135    │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 305/305 0:00:25 • 0:00:00 12.18it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2023', '--data.cross_year_eval_id', '2018'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+Evaluating train_year=2023 on test_year=2018
+=============train.py===================
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.000763240945741317
+ 
+ Computed pos_class_weight = 1310.2022442319637
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2023, Eval year: 2018
+Train events: 47, Val events: 10, Test events: 27
+Loading HDF5 files
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.27094921469688416    │
+│          test_f1          │    0.11228307336568832    │
+│         test_iou          │    0.05948088318109512    │
+│         test_loss         │    0.0306714940816164     │
+│      test_precision       │    0.06004442647099495    │
+│        test_recall        │    0.8637153506278992     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 481/481 0:00:40 • 0:00:00 11.77it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2023', '--data.cross_year_eval_id', '2019'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+Evaluating train_year=2023 on test_year=2019
+=============train.py===================
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.000763240945741317
+ 
+ Computed pos_class_weight = 1310.2022442319637
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2023, Eval year: 2019
+Train events: 47, Val events: 10, Test events: 12
+Loading HDF5 files
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.11811317503452301    │
+│          test_f1          │     0.108172208070755     │
+│         test_iou          │    0.05717867612838745    │
+│         test_loss         │    0.01540123950690031    │
+│      test_precision       │    0.05926716700196266    │
+│        test_recall        │    0.6187015771865845     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 163/163 0:00:13 • 0:00:00 12.26it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2023', '--data.cross_year_eval_id', '2020'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+Evaluating train_year=2023 on test_year=2020
+=============train.py===================
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.000763240945741317
+ 
+ Computed pos_class_weight = 1310.2022442319637
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2023, Eval year: 2020
+Train events: 47, Val events: 10, Test events: 31
+Loading HDF5 files
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.2323819100856781     │
+│          test_f1          │    0.12223091721534729    │
+│         test_iou          │    0.06509368866682053    │
+│         test_loss         │    0.02410365827381611    │
+│      test_precision       │    0.0662342756986618     │
+│        test_recall        │     0.790795624256134     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 462/462 0:00:39 • 0:00:00 11.64it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2023', '--data.cross_year_eval_id', '2021'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+Evaluating train_year=2023 on test_year=2021
+=============train.py===================
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.000763240945741317
+ 
+ Computed pos_class_weight = 1310.2022442319637
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2023, Eval year: 2021
+Train events: 47, Val events: 10, Test events: 24
+Loading HDF5 files
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.3877145051956177     │
+│          test_f1          │    0.10581088811159134    │
+│         test_iou          │    0.05586078390479088    │
+│         test_loss         │   0.027699120342731476    │
+│      test_precision       │    0.0560324601829052     │
+│        test_recall        │    0.9480035901069641     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 494/494 0:00:41 • 0:00:00 11.62it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2023', '--data.cross_year_eval_id', '2022'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+Evaluating train_year=2023 on test_year=2022
+=============train.py===================
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.000763240945741317
+ 
+ Computed pos_class_weight = 1310.2022442319637
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2023, Eval year: 2022
+Train events: 47, Val events: 10, Test events: 19
+Loading HDF5 files
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.1370580494403839     │
+│          test_f1          │    0.07471278309822083    │
+│         test_iou          │   0.038806043565273285    │
+│         test_loss         │   0.011055395007133484    │
+│      test_precision       │    0.03966397047042847    │
+│        test_recall        │    0.6421030759811401     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 446/446 0:00:37 • 0:00:00 11.58it/s  
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['--config', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--split_json', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--checkpoint_json', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/inputs/utae_cross_year_checkpoints_dice.json', '--train_years', '2016,2017,2022,2023', '--test_years', '2016,2017,2018,2019,2020,2021,2022,2023', '--output_csv', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv', '--disable_wandb'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_train', 'false', '--do_test', 'true', '--do_validate', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_duration_stratified_split.json', '--data.cross_year_train_id', '2023', '--data.cross_year_eval_id', '2023'].
+Seed set to 0
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Restoring states from the checkpoint path at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+LOCAL_RANK: 0 - CUDA_VISIBLE_DEVICES: [0]
+Loaded model weights from the checkpoint at /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train/utae_train_2023_dice/wildfire_progression/jnkinqx3/checkpoints/best-epoch=8-val_avg_precision=0.31.ckpt
+Evaluating train_year=2023 on test_year=2023
+=============train.py===================
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.000763240945741317
+ 
+ Computed pos_class_weight = 1310.2022442319637
+ 
+ Using pos_class_weight after clamping = 1000.0
+Using temporal_position_mode =  relative
+Using loss function =  Focal
+Using positive class weight =  1000.0
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+Using cross-year split:
+Train year: 2023, Eval year: 2023
+Train events: 47, Val events: 10, Test events: 11
+Loading HDF5 files
+True [2023] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃        Test metric        ┃       DataLoader 0        ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│          test_AP          │    0.3420061767101288     │
+│          test_f1          │    0.13152554631233215    │
+│         test_iou          │    0.0703919380903244     │
+│         test_loss         │    0.01896090991795063    │
+│      test_precision       │    0.07066253572702408    │
+│        test_recall        │    0.9484056830406189     │
+└───────────────────────────┴───────────────────────────┘
+Testing ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 352/352 0:00:29 • 0:00:00 11.99it/s  
+Saved cross-year results to /share/castor/home/e2406754/cde_mt/WildfireSpreadTSPlus/results/utae_cross_year_evaluation_wstsplus_dice.csv

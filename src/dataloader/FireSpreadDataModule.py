@@ -192,7 +192,7 @@ class FireSpreadDataModule(LightningDataModule):
 
         if need_val:
             self.val_dataset = self._build_dataset(
-                val_years, val_event_ids, True, None, train_years
+                val_years, val_event_ids, False, None, train_years
             )
             if self.filter_ignition_val_test:
                 self.val_dataset = self.filter_dataset(self.val_dataset)
@@ -216,7 +216,7 @@ class FireSpreadDataModule(LightningDataModule):
             if self.predict_split == "train":
                 if self.train_dataset is None:
                     self.train_dataset = self._build_dataset(
-                        train_years, train_event_ids, True, None, train_years
+                        train_years, train_event_ids, False, None, train_years
                     )
                 self.predict_dataset = self.train_dataset
             elif self.predict_split == "test":
@@ -232,7 +232,7 @@ class FireSpreadDataModule(LightningDataModule):
             else:
                 if self.val_dataset is None:
                     self.val_dataset = self._build_dataset(
-                        val_years, val_event_ids, True, None, train_years
+                        val_years, val_event_ids, False, None, train_years
                     )
                 self.predict_dataset = self.val_dataset
 
