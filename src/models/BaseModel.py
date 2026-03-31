@@ -86,8 +86,8 @@ class BaseModel(pl.LightningModule, ABC):
             if self.hparams.alpha_focal is None:
                 w = self.hparams.pos_class_weight
                 alpha = w / (1 + w) if w is not None else 0.75
-                self.hparams.alpha_focal = min(alpha, 0.95)
-        #     self.hparams.pos_class_weight /= 1 + self.hparams.pos_class_weight  # RT: Calculating alpha for focal loss, alpha should be between 0-1
+                self.hparams.alpha_focal = min(alpha, 0.95) # RT: Calculating alpha for focal loss, alpha should be between 0-1
+                print(f"\nCalculated alpha for focal loss: {self.hparams.alpha_focal}")
 
         self.loss = self.get_loss()
         threshold = self.hparams.f1_threshold if self.hparams.f1_threshold is not None else 0.5
@@ -458,20 +458,6 @@ class BaseModel(pl.LightningModule, ABC):
             return JaccardLoss(mode="binary")
         elif self.hparams.loss_function == "Dice":
             return DiceLoss(mode="binary")
-
-    # def compute_loss(self, y_hat, y):
-    #     if self.hparams.loss_function == "Focal":
-    #         alpha = self.hparams.alpha_focal if self.hparams.alpha_focal is not None else 0.25
-    #         return self.loss(
-    #             y_hat,
-    #             y.float(),
-    #             alpha=alpha,
-    #             gamma=2,
-    #             reduction="mean",
-    #         )
-    #     else:
-    #         return self.loss(y_hat, y.float())
-        
 
     def compute_loss(self, y_hat, y):
         if self.hparams.loss_function == "Focal":
