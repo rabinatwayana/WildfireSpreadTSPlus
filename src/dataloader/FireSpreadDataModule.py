@@ -181,6 +181,7 @@ class FireSpreadDataModule(LightningDataModule):
             self.train_dataset = self._build_dataset(
                 train_years, train_event_ids, True, None, train_years
             )
+            print(f"Initial train dataset size: {len(self.train_dataset)}")
             if self.non_outlier_indices_path is not None:
                 non_outlier_indices = np.load(self.non_outlier_indices_path).tolist()
                 print(f"Subsetting train_loader using {self.non_outlier_indices_path}")
@@ -189,15 +190,18 @@ class FireSpreadDataModule(LightningDataModule):
                 self.train_dataset = self.filter_dataset(self.train_dataset)
             if self.ignition_only_train:
                 self.train_dataset = self.keep_ignition(self.train_dataset)
+            print(f"Final train dataset size after filtering: {len(self.train_dataset)}")
 
         if need_val:
             self.val_dataset = self._build_dataset(
                 val_years, val_event_ids, False, None, train_years
             )
+            print(f"Initial val dataset size: {len(self.val_dataset)}")
             if self.filter_ignition_val_test:
                 self.val_dataset = self.filter_dataset(self.val_dataset)
             if self.ignition_only_val_test:
                 self.val_dataset = self.keep_ignition(self.val_dataset)
+            print(f"Final val dataset size after filtering: {len(self.val_dataset)}")
 
         if need_test or (need_predict and self.predict_split == "test"):
             self.test_dataset = self._build_dataset(
@@ -207,10 +211,12 @@ class FireSpreadDataModule(LightningDataModule):
                 self.n_leading_observations_test_adjustment,
                 train_years,
             )
+            print(f"Initial test dataset size: {len(self.test_dataset)}")
             if self.filter_ignition_val_test:
                 self.test_dataset = self.filter_dataset(self.test_dataset)
             if self.ignition_only_val_test:
                 self.test_dataset = self.keep_ignition(self.test_dataset)
+            print(f"Final test dataset size after filtering: {len(self.test_dataset)}")
 
         if need_predict:
             if self.predict_split == "train":

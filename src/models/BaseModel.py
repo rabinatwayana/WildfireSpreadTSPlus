@@ -71,14 +71,18 @@ class BaseModel(pl.LightningModule, ABC):
         print("Using temporal_position_mode = ",self.hparams.temporal_position_mode)
         print("Using loss function = ",self.hparams.loss_function)
         print("Using positive class weight = ",self.hparams.pos_class_weight)
+        print("Using device = ",self.device)
 
 
         # self.hparams.use_doy = use_doy #RT: As use_doy was not retained.
         # self.hparams.temporal_position_mode=temporal_position_mode
 
         if required_img_size is not None:
+            # self.hparams.required_img_size = torch.Size(
+            #     required_img_size, device=self.device
+            # )
             self.hparams.required_img_size = torch.Size(
-                required_img_size, device=self.device
+                required_img_size
             )
 
         # Normalize class weights by assuming that the negative class has weight 1
@@ -110,18 +114,20 @@ class BaseModel(pl.LightningModule, ABC):
         self.test_precision = torchmetrics.Precision("binary", threshold=threshold)
         self.test_recall = torchmetrics.Recall("binary", threshold=threshold)
         self.test_iou = torchmetrics.JaccardIndex("binary",threshold=threshold)
-        self.conf_mat = torchmetrics.ConfusionMatrix("binary",threshold=threshold)
+        # self.conf_mat = torchmetrics.ConfusionMatrix("binary",threshold=threshold)
 
         # Plot PR curve at the end of training. Use fixed number of threshold to avoid the plot becoming 800MB+. 
-        self.test_pr_curve = torchmetrics.PrecisionRecallCurve("binary", thresholds=100)
+        # self.conf_mat = torchmetrics.ConfusionMatrix("binary")
+        # self.test_pr_curve = torchmetrics.PrecisionRecallCurve("binary", thresholds=100)
 
     def forward(self, x, doys=None):
+
     # def forward(self, x):
         # If doys are used, the model needs to re-implement the forward method
         if self.hparams.flatten_temporal_dimension and len(x.shape) == 5:
             x = x.flatten(start_dim=1, end_dim=2)
         return self.model(x)
-
+    
     def get_pred_and_gt(self, batch):
         """_summary_ Unbatch the data and perform inference on each sample.
 
@@ -144,7 +150,6 @@ class BaseModel(pl.LightningModule, ABC):
         # else:
         #     x, y = batch
         #     doys = None
-        
         if len(batch) == 3:
             x, y, doys = batch
         elif len(batch) == 2:
@@ -152,17 +157,13 @@ class BaseModel(pl.LightningModule, ABC):
             doys = None
         else:
             raise ValueError(
-                f"Unexpected batch structure with {len(batch)} elements. "
-                "Expected either (x, y) or (x, y, doys)."
+                f"Unexpected batch structure with {len(batch)} elements. Expected either (x, y) or (x, y, doys)."
             )
-
-
         # If the model requires a certain fixed size, perform repeated inference on crops of the image,
         # and aggregate the results. When we reach the last row or column, which might not be divisible by
         # the required size, we align the crop window with the right/bottom edge of the image. This means 
         # that there is some amount of overlap between the last two crops in each row/column. We handle this
         # by simply overwriting the existing predictions with the new ones. 
-
         if self.hparams.required_img_size is not None:
             if x.ndim == 5:
                 B, _, _, H, W = x.shape
@@ -175,45 +176,44 @@ class BaseModel(pl.LightningModule, ABC):
 
             if x.shape[-2:] != self.hparams.required_img_size:
                 if B != 1:
-                    raise ValueError(
-                        "Not implemented: repeated cropping for batch size > 1."
-                    )
-                H_req, W_req = self.hparams.required_img_size
+                    raise ValueError("Batch > 1 not supported for tiling.")
 
+                H_req, W_req = self.hparams.required_img_size
                 n_H = math.ceil(H / H_req)
                 n_W = math.ceil(W / W_req)
 
-                agg_output = torch.zeros(B, H, W, device=self.device)
+                # CPU buffer (prevents OOM)
+                agg_output = torch.zeros(B, H, W, device="cpu")
 
                 for i in range(n_H):
                     for j in range(n_W):
-                        if i == n_H - 1:
-                            H1 = H - H_req
-                            H2 = H
-                        else:
-                            H1 = i * H_req
-                            H2 = (i + 1) * H_req
-                        if j == n_W - 1:
-                            W1 = W - W_req
-                            W2 = W
-                        else:
-                            W1 = j * W_req
-                            W2 = (j + 1) * W_req
+
+                        H1 = H - H_req if i == n_H - 1 else i * H_req
+                        H2 = H if i == n_H - 1 else (i + 1) * H_req
+                        W1 = W - W_req if j == n_W - 1 else j * W_req
+                        W2 = W if j == n_W - 1 else (j + 1) * W_req
 
                         if x.ndim == 5:
                             x_crop = x[:, :, :, H1:H2, W1:W2]
                         else:
                             x_crop = x[:, :, H1:H2, W1:W2]
 
-                        agg_output[:, H1:H2, W1:W2] = self(x_crop, doys).squeeze(1)
+                        # GPU forward
+                        with torch.inference_mode():
+                            y_hat_crop = self(x_crop, doys).squeeze(1)
 
-                y_hat = agg_output
+                        # move ONLY result to CPU
+                        agg_output[:, H1:H2, W1:W2] = y_hat_crop.detach().cpu()
+
+                # move final output back to GPU
+                y_hat = agg_output.to(self.device)
                 return y_hat, y
 
+        # normal case (no tiling)
         y_hat = self(x, doys).squeeze(1)
-
         return y_hat, y
 
+    
     def center_crop(self, x, y, crop_size=128):
         """_summary_ Crops the center of the image to 128x128, 
         Only used for computing the test performance.
@@ -347,19 +347,25 @@ class BaseModel(pl.LightningModule, ABC):
         Returns:
             _type_: _description_
         """
-        y_hat, y = self.get_pred_and_gt(batch)
+        with torch.no_grad():  
+            y_hat, y = self.get_pred_and_gt(batch)
 
-        if self.hparams.crop_before_eval:
-            y_hat, y = self.center_crop(y_hat, y)
+            if self.hparams.crop_before_eval:
+                y_hat, y = self.center_crop(y_hat, y)
 
-        loss = self.compute_loss(y_hat, y)
-        self.test_f1(y_hat, y)
-        self.test_avg_precision(y_hat, y)
-        self.test_precision(y_hat, y)
-        self.test_recall(y_hat, y)
-        self.test_iou(y_hat, y)
-        self.test_pr_curve.update(y_hat, y)
-        self.conf_mat.update(y_hat, y)
+            loss = self.compute_loss(y_hat, y)
+
+            self.test_f1(y_hat, y)
+            self.test_avg_precision(y_hat, y)
+            self.test_precision(y_hat, y)
+            self.test_recall(y_hat, y)
+            self.test_iou(y_hat, y)
+
+            # Move to CPU immediately
+            # self.test_pr_curve.update(y_hat.detach(), y.detach())
+            # self.conf_mat.update(y_hat.detach(), y.detach())
+            
+
 
         self.log(
             "test_loss",
@@ -387,38 +393,40 @@ class BaseModel(pl.LightningModule, ABC):
             sync_dist=True,
         )
         return loss
+    def on_test_start(self):
+        torch.cuda.empty_cache()
 
-    def on_test_epoch_end(self) -> None:
-        """_summary_ Log the test PR curve and confusion matrix after predicting all test samples.
-        """
-        #conf_mat = self.conf_mat.compute().cpu().numpy()
-        #wandb_table = wandb.Table(
-        #    data=conf_mat, columns=["PredictedBackground", "PredictedFire"]
-        #)
-        #wandb.log({"Test confusion matrix": wandb_table})
+    # def on_test_epoch_end(self) -> None:
+    #     """_summary_ Log the test PR curve and confusion matrix after predicting all test samples.
+    #     """
+    #     #conf_mat = self.conf_mat.compute().cpu().numpy()
+    #     #wandb_table = wandb.Table(
+    #     #    data=conf_mat, columns=["PredictedBackground", "PredictedFire"]
+    #     #)
+    #     #wandb.log({"Test confusion matrix": wandb_table})
 
-        precision, recall, thresholds = self.test_pr_curve.compute()
+    #     precision, recall, thresholds = self.test_pr_curve.compute()
 
-        # # Move tensors to CPU
-        precision = precision.cpu().numpy()
-        recall = recall.cpu().numpy()
-        thresholds = thresholds.cpu().numpy()
-        output_npz_path = os.path.join(self.trainer.default_root_dir, f"test_pr_curve.npz")
-        # np.savez("test_pr_curve_data.npz", precision=precision, recall=recall, thresholds=thresholds)
-        np.savez(output_npz_path, precision=precision, recall=recall, thresholds=thresholds)
+    #     # # Move tensors to CPU
+    #     precision = precision.cpu().numpy()
+    #     recall = recall.cpu().numpy()
+    #     thresholds = thresholds.cpu().numpy()
+    #     output_npz_path = os.path.join(self.trainer.default_root_dir, f"test_pr_curve.npz")
+    #     # np.savez("test_pr_curve_data.npz", precision=precision, recall=recall, thresholds=thresholds)
+    #     np.savez(output_npz_path, precision=precision, recall=recall, thresholds=thresholds)
 
 
-        fig, ax = plt.subplots()
-        ax.plot(recall, precision, marker='.')
-        ax.set_xlabel('Recall')
-        ax.set_ylabel('Precision')
-        ax.set_title('Precision-Recall Curve')
-        output_png_path = os.path.join(self.trainer.default_root_dir, f"test_pr_curve.png")
-        fig.savefig(output_png_path, dpi=300, bbox_inches="tight")
+    #     fig, ax = plt.subplots()
+    #     ax.plot(recall, precision, marker='.')
+    #     ax.set_xlabel('Recall')
+    #     ax.set_ylabel('Precision')
+    #     ax.set_title('Precision-Recall Curve')
+    #     output_png_path = os.path.join(self.trainer.default_root_dir, f"test_pr_curve.png")
+    #     fig.savefig(output_png_path, dpi=300, bbox_inches="tight")
         
-        if wandb.run is not None:
-            wandb.log({"Test PR Curve": wandb.Image(fig)})
-        plt.close(fig)
+    #     if wandb.run is not None:
+    #         wandb.log({"Test PR Curve": wandb.Image(fig)})
+    #     plt.close(fig)
 
     def predict_step(self, batch, batch_idx, dataloader_idx=0):
         if len(batch) == 3:
@@ -444,12 +452,11 @@ class BaseModel(pl.LightningModule, ABC):
 
     def get_loss(self):
         if self.hparams.loss_function == "BCE":
-            return nn.BCEWithLogitsLoss(
-                pos_weight=torch.tensor([self.hparams.pos_class_weight])
-                # pos_weight=torch.Tensor(
-                #     [self.hparams.pos_class_weight], device=self.device
-                # )
+            self.register_buffer(
+                "pos_weight",
+                torch.tensor([self.hparams.pos_class_weight])
             )
+            return nn.BCEWithLogitsLoss(pos_weight=self.pos_weight)
         elif self.hparams.loss_function == "Focal":
             return sigmoid_focal_loss
         elif self.hparams.loss_function == "Lovasz":

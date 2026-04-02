@@ -22,7 +22,7 @@ callbacks:
     init_args:
       monitor: val_avg_precision
       mode: max
-      patience: 10 #5 for tuning, 10 for training
+      patience: 15 #5 for tuning, 10 for training
       min_delta: 0.0001
       verbose: true
 fast_dev_run: false

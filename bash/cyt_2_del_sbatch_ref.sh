@@ -2,22 +2,22 @@
 # L'argument '-l' est indispensable pour bénéficier des directives de votre .bashrc
 
 # On peut éventuellement placer ici les commentaires SBATCH permettant de définir les paramètres par défaut de lancement :
-# SBATCH --gres gpu:1
-# SBATCH --constraint 2080
-# SBATCH --cpus-per-gpu 10
-# SBATCH --mem 64G
-# SBATCH --nodelist=sn1
+#SBATCH --gres gpu:1
+#SBATCH --constraint 2080
+#SBATCH --cpus-per-gpu 10
+#SBATCH --mem 32G
+#SBATCH --nodelist=sn1
 
-# set -euo pipefail
-# source /share/common/anaconda3/etc/profile.d/conda.sh
-# conda activate cde_mt_3.12
+set -euo pipefail
+source /share/common/anaconda3/etc/profile.d/conda.sh
+conda activate cde_mt_3.12
 
 export PYTHONPATH="$PWD:$PWD/src"
 export WANDB_MODE=online
-# export WANDB_DEBUG=true
-# unset WANDB_DISABLED
-# # Set this if your cluster does not automatically pass it into sbatch jobs
-# export WANDB_API_KEY="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"
+export WANDB_DEBUG=true
+unset WANDB_DISABLED
+# Set this if your cluster does not automatically pass it into sbatch jobs
+export WANDB_API_KEY="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"
 
 # ==================================================================
 # duration based stratified randon split for cross year experiment
@@ -79,7 +79,7 @@ ENTITY="wildfire_continual_learning"
 GROUP_NAME=cross_year_train_ecol2l3_split
 LIGHTENING_LOG_DIR="./lightning_logs/cross_year_train_ecol2l3_split"
 
-for YEAR in 2016 2017 2018 2019 2020 2021 2022 2023; do
+for YEAR in 2021; do
   RUN_NAME="utae_train_${YEAR}"
   echo "======================================"
   echo "STARTING YEAR: $YEAR"
@@ -106,5 +106,5 @@ done
     # --trainer.precision 16
 #  --data.batch_size 32
     # --model.init_args.encoder_weights none \
-# 2018 2019 2020 2021
+# for YEAR in 2016,2017,2018,2019,2020,2021,2022,2023; do
 # --data.batch_size 4

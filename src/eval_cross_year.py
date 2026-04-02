@@ -7,7 +7,7 @@ from pathlib import Path
 from dataloader.FireSpreadDataModule import FireSpreadDataModule
 from models import BaseModel
 from train import MyLightningCLI
-
+import pandas as pd
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -154,28 +154,54 @@ def main():
     train_years = [int(x.strip()) for x in args.train_years.split(",") if x.strip()]
     test_years = [int(x.strip()) for x in args.test_years.split(",") if x.strip()]
 
-    rows = []
+    metrics_tables = {
+        "AP": [],
+        "F1": [],
+        "Precision": [],
+        "Recall": [],
+        "IoU": []
+    }
     for train_year in train_years:
         if train_year not in checkpoint_map:
             raise KeyError(f"No checkpoint found for train_year={train_year} in {args.checkpoint_csv}")
+
         ckpt_path = checkpoint_map[train_year]
-        row = {"train_year": train_year}
+
+        # Initialize row for each metric
+        row_ap = {"train_year": train_year}
+        row_f1 = {"train_year": train_year}
+        row_prec = {"train_year": train_year}
+        row_rec = {"train_year": train_year}
+        row_iou = {"train_year": train_year}
+
         for test_year in test_years:
             print(f"Evaluating train_year={train_year} on test_year={test_year}")
+
             cli_args = build_cli_args(args, train_year, test_year, ckpt_path)
             metrics = evaluate_pair(cli_args)
-            row[str(test_year)] = round(metrics.get("test_AP"), 6)
-        ap_values = [row[str(year)] for year in test_years]
-        row["Avg"] = sum(ap_values) / len(ap_values)
-        rows.append(row)
 
-    output_path = Path(args.output_csv).expanduser().resolve()
+            row_ap[str(test_year)] = round(metrics.get("test_AP", 0), 6)
+            row_f1[str(test_year)] = round(metrics.get("test_F1", 0), 6)
+            row_prec[str(test_year)] = round(metrics.get("test_precision", 0), 6)
+            row_rec[str(test_year)] = round(metrics.get("test_recall", 0), 6)
+            row_iou[str(test_year)] = round(metrics.get("test_iou", 0), 6)
+
+        # Compute averages
+        for row, key in zip(
+            [row_ap, row_f1, row_prec, row_rec, row_iou],
+            ["AP", "F1", "Precision", "Recall", "IoU"]
+        ):
+            values = [row[str(year)] for year in test_years]
+            row["Avg"] = sum(values) / len(values)
+            metrics_tables[key].append(row)
+
+    output_path = Path(args.output_csv).with_suffix(".xlsx").expanduser().resolve()
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    fieldnames = ["train_year"] + [str(year) for year in test_years] + ["Avg"]
-    with open(output_path, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(rows)
+
+    with pd.ExcelWriter(output_path, engine="openpyxl") as writer:
+        for metric_name, rows in metrics_tables.items():
+            df_metric = pd.DataFrame(rows)
+            df_metric.to_excel(writer, sheet_name=metric_name, index=False)
 
     print(f"Saved cross-year results to {output_path}")
 
