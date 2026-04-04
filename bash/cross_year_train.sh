@@ -79,8 +79,9 @@ ENTITY="wildfire_continual_learning"
 GROUP_NAME=cross_year_train_ecol2l3_split
 LIGHTENING_LOG_DIR="./lightning_logs/cross_year_train_ecol2l3_split"
 
-for YEAR in 2016 2017 2018 2019 2020 2021 2022 2023; do
-  RUN_NAME="utae_train_${YEAR}"
+# for YEAR in 2016 2017 2018 2019 2020 2021 2022 2023; do
+for YEAR in 2020; do
+  RUN_NAME="utae_train_${YEAR}_no_augment"
   echo "======================================"
   echo "STARTING YEAR: $YEAR"
   echo "RUN NAME: $RUN_NAME"

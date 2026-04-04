@@ -181,7 +181,7 @@ def main():
             metrics = evaluate_pair(cli_args)
 
             row_ap[str(test_year)] = round(metrics.get("test_AP", 0), 6)
-            row_f1[str(test_year)] = round(metrics.get("test_F1", 0), 6)
+            row_f1[str(test_year)] = round(metrics.get("test_f1", 0), 6)
             row_prec[str(test_year)] = round(metrics.get("test_precision", 0), 6)
             row_rec[str(test_year)] = round(metrics.get("test_recall", 0), 6)
             row_iou[str(test_year)] = round(metrics.get("test_iou", 0), 6)

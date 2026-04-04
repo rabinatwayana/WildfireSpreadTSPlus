@@ -378,10 +378,10 @@ class FireSpreadDataset(Dataset):
 
         # Augmentation has to come before normalization, because we have to correct the angle features when we change
         # the orientation of the image.
-        if self.is_train:
-            x, y = self.augment(x, y)
-        else:
-            x, y = self.center_crop_x32(x, y)
+        # if self.is_train:
+        #     x, y = self.augment(x, y)
+        # else:
+        x, y = self.center_crop_x32(x, y)
         
         # If using a model that expects images of larger size, use zero-padding 
         if self.is_pad:

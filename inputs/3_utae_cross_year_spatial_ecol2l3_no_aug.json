@@ -1,0 +1,4 @@
+{
+    "2020":"/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train_ecol2l3_split/utae_train_2020_no_augment/wildfire_progression/ae6uyz3m/checkpoints/best-epoch=27-val_avg_precision=0.36.ckpt",
+    "2021":"/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train_ecol2l3_split/utae_train_2021_no_augment/wildfire_progression/2foskic0/checkpoints/best-epoch=57-val_avg_precision=0.35.ckpt"
+}

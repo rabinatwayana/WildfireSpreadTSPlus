@@ -113,7 +113,10 @@ class BaseModel(pl.LightningModule, ABC):
         # self.val_avg_precision = self.test_avg_precision.clone()
         self.test_precision = torchmetrics.Precision("binary", threshold=threshold)
         self.test_recall = torchmetrics.Recall("binary", threshold=threshold)
-        self.test_iou = torchmetrics.JaccardIndex("binary",threshold=threshold)
+
+        self.train_iou = torchmetrics.JaccardIndex("binary",threshold=threshold)
+        self.val_iou = self.train_iou.clone()
+        self.test_iou = self.train_iou.clone()
         # self.conf_mat = torchmetrics.ConfusionMatrix("binary",threshold=threshold)
 
         # Plot PR curve at the end of training. Use fixed number of threshold to avoid the plot becoming 800MB+. 
@@ -257,6 +260,7 @@ class BaseModel(pl.LightningModule, ABC):
 
         self.train_f1(y_hat, y)
         self.train_avg_precision(y_hat, y)
+        self.train_iou(y_hat, y)
         self.log(
             "train_loss",
             # loss.item(),
@@ -285,6 +289,15 @@ class BaseModel(pl.LightningModule, ABC):
             logger=True,
             sync_dist=True,
         )
+        self.log(
+            "train_iou",
+            self.train_iou,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=False,
+            logger=True,
+            sync_dist=True,
+        )
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -307,6 +320,7 @@ class BaseModel(pl.LightningModule, ABC):
         # changing to val ap to match test metric
         self.val_avg_precision(y_hat, y)
         self.val_f1(y_hat, y)
+        self.val_iou(y_hat, y)
         self.log(
             "val_loss",
             loss,
@@ -334,7 +348,16 @@ class BaseModel(pl.LightningModule, ABC):
             prog_bar=False,
             logger=True,
             sync_dist=True,
-        )  
+        )
+        self.log(
+            "val_iou",
+            self.val_iou,
+            on_step=False,
+            on_epoch=True,
+            prog_bar=False,
+            logger=True,
+            sync_dist=True,
+        )
         return loss
 
     def test_step(self, batch, batch_idx):
