@@ -66,7 +66,7 @@ class MyLightningCLI(LightningCLI):
         print(f" \n fire_rate = {fire_rate}")
 
         print(f" \n Computed pos_class_weight = {pos_class_weight}")
-        pos_class_weight = min (1000.0, pos_class_weight)
+        pos_class_weight = min(20, pos_class_weight)
 
         print(f" \n Using pos_class_weight after clamping = {pos_class_weight}")
 
@@ -118,13 +118,19 @@ def main():
         cli.trainer.fit(cli.model, cli.datamodule,
                         ckpt_path=cli.config.ckpt_path)
         end = time.perf_counter()
+
         elapsed_time=end-start
         minutes, seconds = divmod(elapsed_time, 60)
         print(f"Training Time : {int(minutes)}m {seconds:.2f}s")
 
+        # print("Computing validation PR curve to select best threshold...")
+        # val_loader = cli.datamodule.val_dataloader()  # get validation dataloader
+        # cli.model.compute_val_pr_curve(val_loader)  
+
     
     # Without this, the model's state at the end of the training would be used, which is not necessarily the best.
     ckpt = cli.config.ckpt_path
+    print(f"Using checkpoint : {ckpt}")
     if cli.config.do_train:
         ckpt = "best" # If we have trained a model, use the best checkpoint for testing and predicting.
 
