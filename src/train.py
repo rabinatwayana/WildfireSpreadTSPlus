@@ -1,3 +1,7 @@
+"""
+https://docs.pytorch.org/docs/stable/generated/torch.nn.BCEWithLogitsLoss.html
+"""
+
 from pytorch_lightning.utilities import rank_zero_only
 import torch
 from dataloader.FireSpreadDataModule import FireSpreadDataModule

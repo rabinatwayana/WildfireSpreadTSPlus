@@ -43,7 +43,7 @@ class BaseModel(pl.LightningModule, ABC):
         self,
         n_channels: int,
         pos_class_weight: float,
-        loss_function: Literal["BCE", "Focal", "Lovasz", "Jaccard", "Dice"],
+        loss_function: Literal["BCE", "Focal", "Lovasz", "Jaccard", "Dice", "BCE+Dice"],
         flatten_temporal_dimension: bool = False,
         temporal_position_mode: str | None = None,
         # use_doy: bool = False, #RT
@@ -482,6 +482,16 @@ class BaseModel(pl.LightningModule, ABC):
                 torch.tensor([self.hparams.pos_class_weight])
             )
             return nn.BCEWithLogitsLoss(pos_weight=self.pos_weight)
+        if self.hparams.loss_function == "BCE+Dice":
+            self.register_buffer(
+                "pos_weight",
+                torch.tensor([self.hparams.pos_class_weight])
+            )
+            return {
+            "bce": nn.BCEWithLogitsLoss(pos_weight=self.pos_weight),
+            "dice": DiceLoss(mode="binary"),
+        }
+
         elif self.hparams.loss_function == "Focal":
             return sigmoid_focal_loss
         elif self.hparams.loss_function == "Lovasz":
@@ -501,6 +511,12 @@ class BaseModel(pl.LightningModule, ABC):
                 gamma=2,
                 reduction="mean",
             )
+        elif self.hparams.loss_function == "BCE+Dice":
+            print("Computing combined BCE + Dice loss...")
+            y = y.float().to(y_hat.device)
+            bce = self.loss["bce"](y_hat, y)
+            dice = self.loss["dice"](y_hat, y)
+            return (0.5*bce) + (0.5*dice)
         else:
             return self.loss(y_hat, y.float())
 

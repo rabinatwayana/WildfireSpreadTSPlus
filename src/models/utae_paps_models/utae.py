@@ -2,6 +2,7 @@
 U-TAE Implementation
 Author: Vivien Sainte Fare Garnot (github/VSainteuf)
 License: MIT
+source: https://github.com/VSainteuf/utae-paps/blob/main/src/backbones/utae.py
 """
 import torch
 import torch.nn as nn

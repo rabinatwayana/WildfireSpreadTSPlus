@@ -81,7 +81,7 @@ LIGHTENING_LOG_DIR="./lightning_logs/cross_year_train_ecol2l3_debug"
 
 # for YEAR in 2016 2017 2018 2019 2020 2021 2022 2023; do
 for YEAR in 2018; do
-  RUN_NAME="utae_train_${YEAR}_posweight20_cosine_feats"
+  RUN_NAME="utae_train_${YEAR}_posweight20_bce_dice"
   echo "======================================"
   echo "STARTING YEAR: $YEAR"
   echo "RUN NAME: $RUN_NAME"
@@ -101,8 +101,6 @@ for YEAR in 2018; do
     --trainer.logger.init_args.name "${RUN_NAME}" \
     --model.init_args.loss_function "BCE" \
     --optimizer.init_args.lr 1e-3 \
-    --model.init_args.n_channels 43 \
-    --trainer.precision 16 \
     --data.batch_size 16
 done
     # --trainer.precision 16
@@ -111,3 +109,5 @@ done
 # 2018 2019 2020 2021
 # --data.batch_size 4
     # --model.init_args.n_channels 43 \
+    # --trainer.precision 32 \
+# 
