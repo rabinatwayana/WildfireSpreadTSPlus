@@ -31,6 +31,8 @@ from segmentation_models_pytorch.losses import (DiceLoss, JaccardLoss,
 from torchvision.ops import sigmoid_focal_loss
 import matplotlib.pyplot as plt
 import os
+from sklearn.metrics import precision_recall_curve
+import time
 
 class BaseModel(pl.LightningModule, ABC):
     """_summary_ Base model class for all models in this project. Implements the training, validation and test steps, 
@@ -501,3 +503,97 @@ class BaseModel(pl.LightningModule, ABC):
             )
         else:
             return self.loss(y_hat, y.float())
+
+    # def compute_val_pr_curve(self, val_dataloader):
+    #     """
+    #     Run this *after training* to compute PR curve and best threshold.
+    #     """
+    #     all_probs = []
+    #     all_labels = []
+
+    #     self.eval()
+    #     with torch.no_grad():
+    #         for batch in val_dataloader:
+    #             y_hat, y = self.get_pred_and_gt(batch)
+    #             if self.hparams.crop_before_eval:
+    #                 y_hat, y = self.center_crop(y_hat, y)
+    #             all_probs.append(y_hat.cpu())
+    #             all_labels.append(y.cpu())
+
+    #     all_probs = torch.cat(all_probs).numpy()
+    #     all_labels = torch.cat(all_labels).numpy()
+
+    #     precision, recall, thresholds = precision_recall_curve(all_labels, all_probs)
+    #     f1_scores = 2 * (precision * recall) / (precision + recall + 1e-8)
+    #     best_idx = f1_scores.argmax()
+    #     self.best_threshold = thresholds[best_idx]
+
+    #     print(f"Best threshold selected from validation PR curve: {self.best_threshold}")
+
+    #     fig, ax = plt.subplots()
+    #     ax.plot(recall, precision, marker='.')
+    #     ax.set_xlabel('Recall')
+    #     ax.set_ylabel('Precision')
+    #     ax.set_title('Precision-Recall Curve - Validation')
+    #     output_png_path = os.path.join(self.trainer.default_root_dir, f"test_pr_curve.png")
+    #     fig.savefig(output_png_path, dpi=300, bbox_inches="tight")
+        
+    #     if wandb.run is not None:
+    #         wandb.log({"Test PR Curve": wandb.Image(fig)})
+    #         wandb.log({"best_f1_threshold": self.best_threshold})
+    #     plt.close(fig)
+
+    def compute_val_pr_curve(self, val_dataloader):
+        """
+        Run this *after training* to compute PR curve and best threshold.
+        Device-safe version.
+        """
+        all_probs = []
+        all_labels = []
+
+        self.eval()
+        device = next(self.parameters()).device  # Get model device
+
+        with torch.no_grad():
+            for batch in val_dataloader:
+                # Move all tensors in batch to the same device as the model
+                batch = [t.to(device) if torch.is_tensor(t) else t for t in batch]
+
+                y_hat, y = self.get_pred_and_gt(batch)
+
+                if self.hparams.crop_before_eval:
+                    y_hat, y = self.center_crop(y_hat, y)
+
+                # Append CPU copies for aggregation
+                all_probs.append(y_hat.cpu())
+                all_labels.append(y.cpu())
+
+        # Concatenate all predictions and labels
+        all_probs = torch.cat(all_probs).numpy()
+        all_labels = torch.cat(all_labels).numpy()
+
+        # Compute PR curve and best F1 threshold
+        precision, recall, thresholds = precision_recall_curve(all_labels, all_probs)
+        f1_scores = 2 * (precision * recall) / (precision + recall + 1e-8)
+        best_idx = f1_scores.argmax()
+        self.best_threshold = thresholds[best_idx]
+
+        print(f"Best threshold selected from validation PR curve: {self.best_threshold}")
+
+        # Plot PR curve
+        fig, ax = plt.subplots()
+        ax.plot(recall, precision, marker='.')
+        ax.set_xlabel('Recall')
+        ax.set_ylabel('Precision')
+        ax.set_title('Precision-Recall Curve - Validation')
+
+        output_png_path = os.path.join(self.trainer.default_root_dir, "test_pr_curve.png")
+        fig.savefig(output_png_path, dpi=300, bbox_inches="tight")
+
+        # Log to WandB if active
+        if wandb.run is not None:
+            wandb.log({"Test PR Curve": wandb.Image(fig)})
+            wandb.log({"best_f1_threshold": self.best_threshold})
+
+        plt.close(fig)
+  

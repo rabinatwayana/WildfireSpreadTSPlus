@@ -17,6 +17,7 @@ import h5py
 from datetime import datetime
 
 class FireSpreadDataset(Dataset):
+    print("Initializing dataset...")
     def __init__(self, data_dir: str, included_fire_years: List[int], n_leading_observations: int,
                  crop_side_length: int, load_from_hdf5: bool, is_train: bool, remove_duplicate_features: bool,
                  stats_years: List[int], n_leading_observations_test_adjustment: Optional[int] = None, 
@@ -378,10 +379,10 @@ class FireSpreadDataset(Dataset):
 
         # Augmentation has to come before normalization, because we have to correct the angle features when we change
         # the orientation of the image.
-        # if self.is_train:
-        #     x, y = self.augment(x, y)
-        # else:
-        x, y = self.center_crop_x32(x, y)
+        if self.is_train:
+            x, y = self.augment(x, y)
+        else:
+            x, y = self.center_crop_x32(x, y)
         
         # If using a model that expects images of larger size, use zero-padding 
         if self.is_pad:
@@ -389,8 +390,15 @@ class FireSpreadDataset(Dataset):
         
         # Some features take values in [0,360] degrees. By applying sin, we make sure that values near 0 and 360 are
         # close in feature space, since they are also close in reality.
-        x[:, self.indices_of_degree_features, ...] = torch.sin(
-            torch.deg2rad(x[:, self.indices_of_degree_features, ...]))
+        # x[:, self.indices_of_degree_features, ...] = torch.sin(
+        #     torch.deg2rad(x[:, self.indices_of_degree_features, ...]))
+        
+        degree_feats = x[:, self.indices_of_degree_features, ...]
+        sin_feats = torch.sin(torch.deg2rad(degree_feats))
+        cos_feats = torch.cos(torch.deg2rad(degree_feats))
+
+        # Insert cos_feats right after sin_feats
+        x[:, self.indices_of_degree_features, ...] = sin_feats
 
         # Compute binary mask of active fire pixels before normalization changes what 0 means. 
         binary_af_mask = (x[:, -1:, ...] > 0).float()
@@ -412,6 +420,13 @@ class FireSpreadDataset(Dataset):
             new_shape).permute(0, 3, 1, 2)
         x = torch.concatenate(
             [x[:, :16, ...], landcover_encoding, x[:, 17:, ...]], dim=1)
+
+        # Now append cos_feats at the end so land cover channel stays at 16
+        # x = torch.cat([
+        #     x[:, :-2, ...],   # all except last 2 channels
+        #     cos_feats,        # insert here
+        #     x[:, -2:, ...]    # keep last 2 channels at the end
+        # ], dim=1)
 
         return x, y
 
@@ -595,7 +610,7 @@ class FireSpreadDataset(Dataset):
 
         # If we deduplicate static features, we remove them from all time steps but the last one.
         # The last day then gets dynamic and static features. All other days only get dynamic features. 
-        n_features = (int(deduplicate_static_features)*n_dynamic_features)*(n_observations-1) + n_all_features
+        n_features = (int(deduplicate_static_features)*n_dynamic_features)*(n_observations-1) + n_all_features #+3 # +3 for the cos of degree features
 
         return n_features
 

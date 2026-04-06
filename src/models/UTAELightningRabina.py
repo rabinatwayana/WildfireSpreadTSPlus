@@ -59,6 +59,7 @@ class UTAELightningRabina(BaseModel):
         encoder_weights = encoder_weights if encoder_weights != "none" else None
         print(f"\n Using encoder_weights: {encoder_weights}")
         if encoder_weights == "pastis":
+            print(f"\n Loading PASTIS checkpoint from {pretrained_checkpoint_path}")
 
             # repo_default = os.path.join(
             #     os.path.dirname(__file__), "utae_paps_models", "model.pth.tar"
