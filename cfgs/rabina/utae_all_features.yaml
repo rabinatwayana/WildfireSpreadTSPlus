@@ -1,5 +1,6 @@
 # pytorch_lightning==2.0.1
 # Contains best parameters determined in grid search
+#  f1_threshold: 0.7
 seed_everything: 0
 optimizer: 
   class_path: torch.optim.AdamW
