@@ -1,0 +1,71 @@
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/timm/models/layers/__init__.py:49: FutureWarning: Importing from timm.models.layers is deprecated, please import via timm.layers
+  warnings.warn(f"Importing from {__name__} is deprecated, please import via timm.layers", FutureWarning)
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/pytorch_lightning/cli.py:553: LightningCLI's args parameter is intended to run from within Python like if it were from the command line. To prevent mistakes it is not recommended to provide both args and command line arguments, got: sys.argv[1:]=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train_ecol2l3_debug/utae_train_2018_posweight20/wildfire_progression/jqak9tz2/checkpoints/best-epoch=42-val_avg_precision=0.43.ckpt', '--data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--do_cross_year_experiment', 'true', '--cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_spatial_eco_l3_split.json', '--cross_year_train_id', '2018', '--background_size', '200', '--explain_size', '100', '--save_dir', 'shap_feature_plots/cross_year_ecol2l3_debug/2018_posweight18'], args=['-c', 'cfgs/rabina/utae_all_features.yaml', '--trainer', 'cfgs/trainer_single_gpu.yaml', '--data', 'cfgs/data_multitemporal_full_features.yaml', '--data.data_dir', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', '--data.do_cross_year_experiment', 'true', '--data.cross_year_split_json_path', '/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_spatial_eco_l3_split.json', '--data.cross_year_train_id', '2018', '--do_train', 'false', '--do_validate', 'false', '--do_test', 'false', '--do_predict', 'false', '--ckpt_path', '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train_ecol2l3_debug/utae_train_2018_posweight20/wildfire_progression/jqak9tz2/checkpoints/best-epoch=42-val_avg_precision=0.43.ckpt'].
+Seed set to 0
+/share/home/e2406754/.conda/envs/cde_mt_3.12/lib/python3.12/site-packages/lightning_fabric/plugins/environments/slurm.py:204: The `srun` command is available on your system but is not used. HINT: If your intention is to run Lightning on SLURM, prepend your python command with `srun` like so: srun python src/explain_deep_shap.py -c cfgs/rabina/utae_all_fea ...
+GPU available: True (cuda), used: True
+TPU available: False, using: 0 TPU cores
+💡 Tip: For seamless cloud logging and experiment tracking, try installing [litlogger](https://pypi.org/project/litlogger/) to enable LitLogger, which logs metrics and artifacts automatically to the Lightning Experiments platform.
+Initializing dataset...
+=============train.py===================
+True [2018] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+ 
+ fire_rate = 0.0017672789414671097
+ 
+ Computed pos_class_weight = 565.8416317516057
+ 
+ Using pos_class_weight after clamping = 20
+Using temporal_position_mode =  relative
+Using loss function =  BCE
+Using positive class weight =  20.0
+Using device =  cpu
+
+ Using Threshold in metric calculation: 0.5
+
+ Using temporal_position_mode relative
+
+ Using encoder_weights: pastis
+
+ Loading PASTIS checkpoint from /share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar
+Checkpoint loaded successfully from '/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar'
+CLI initialized.
+Namespace(config=[Path_fsr(cfgs/rabina/utae_all_features.yaml, cwd=/share/castor/home/e2406754/cde_mt/WildfireSpreadTSPlus)], seed_everything=0, trainer=Namespace(accelerator='gpu', strategy='auto', devices=1, num_nodes=1, precision='32-true', logger=Namespace(class_path='pytorch_lightning.loggers.wandb.WandbLogger', init_args=Namespace(name=None, save_dir='./lightning_logs', version=None, offline=False, dir=None, id=None, anonymous=None, project='wildfire_progression', log_model=True, experiment=None, prefix='', checkpoint_name=None, add_file_policy='mutable', entity=None, notes=None, tags=None, config=None, config_exclude_keys=None, config_include_keys=None, allow_val_change=None, group=None, job_type=None, mode=None, force=None, reinit=None, resume=None, resume_from=None, fork_from=None, save_code=None, tensorboard=None, sync_tensorboard=None, monitor_gym=None, settings=None)), callbacks=[Namespace(class_path='pytorch_lightning.callbacks.model_checkpoint.ModelCheckpoint', init_args=Namespace(dirpath=None, filename='best-{epoch}-{val_avg_precision:.2f}', monitor='val_avg_precision', verbose=False, save_last=True, save_top_k=1, save_on_exception=False, save_weights_only=False, mode='max', auto_insert_metric_name=True, every_n_train_steps=None, train_time_interval=None, every_n_epochs=None, save_on_train_epoch_end=None, enable_version_counter=True)), Namespace(class_path='pytorch_lightning.callbacks.early_stopping.EarlyStopping', init_args=Namespace(monitor='val_avg_precision', min_delta=0.0001, patience=15, verbose=True, mode='max', strict=True, check_finite=True, stopping_threshold=None, divergence_threshold=None, check_on_train_epoch_end=None, log_rank_zero_only=False))], fast_dev_run=False, max_epochs=100, min_epochs=-1, max_steps=-1, min_steps=-1, max_time=None, limit_train_batches=None, limit_val_batches=None, limit_test_batches=None, limit_predict_batches=None, overfit_batches=0.0, val_check_interval=None, check_val_every_n_epoch=1, num_sanity_val_steps=None, log_every_n_steps=None, enable_checkpointing=None, enable_progress_bar=True, enable_model_summary=None, accumulate_grad_batches=1, gradient_clip_val=None, gradient_clip_algorithm=None, deterministic='warn', benchmark=False, inference_mode=True, use_distributed_sampler=True, profiler=None, detect_anomaly=False, barebones=False, plugins=None, sync_batchnorm=False, reload_dataloaders_every_n_epochs=0, default_root_dir='./lightning_logs', enable_autolog_hparams=True, model_registry=None, __path__=Path_fsr(cfgs/trainer_single_gpu.yaml, cwd=/share/castor/home/e2406754/cde_mt/WildfireSpreadTSPlus)), model=Namespace(class_path='models.UTAELightningRabina', init_args=Namespace(n_channels=40, pos_class_weight=20, encoder_weights='pastis', temporal_position_mode='relative', pretrained_checkpoint_path='/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/src/models/utae_paps_models/model.pth.tar', loss_function='BCE', flatten_temporal_dimension=False, crop_before_eval=False, required_img_size=None, alpha_focal=None, f1_threshold=None)), data=Namespace(data_dir='/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', batch_size=64, n_leading_observations=5, n_leading_observations_test_adjustment=5, crop_side_length=128, load_from_hdf5=True, num_workers=8, remove_duplicate_features=False, is_pad=False, features_to_keep=None, return_doy=False, data_fold_id=0, non_outlier_indices_path=None, filter_ignition_train=False, filter_ignition_val_test=False, ignition_only_train=False, ignition_only_val_test=False, additional_data=False, do_cross_year_experiment=True, cross_year_split_json_path='/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_spatial_eco_l3_split.json', cross_year_train_id=2018, cross_year_eval_id=None, predict_split='val', __path__=Path_fsr(cfgs/data_multitemporal_full_features.yaml, cwd=/share/castor/home/e2406754/cde_mt/WildfireSpreadTSPlus)), do_train=False, do_predict=False, do_test=False, do_validate=False, ckpt_path='/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train_ecol2l3_debug/utae_train_2018_posweight20/wildfire_progression/jqak9tz2/checkpoints/best-epoch=42-val_avg_precision=0.43.ckpt', optimizer=Namespace(class_path='torch.optim.AdamW', init_args=Namespace(lr=0.001, betas=(0.9, 0.999), eps=1e-08, weight_decay=0.01, amsgrad=False, maximize=False, foreach=None, capturable=False, differentiable=False, fused=None)), lr_scheduler=None)
+Args used: Namespace(config='cfgs/rabina/utae_all_features.yaml', trainer='cfgs/trainer_single_gpu.yaml', data='cfgs/data_multitemporal_full_features.yaml', ckpt_path='/share/home/e2406754/cde_mt/WildfireSpreadTSPlus/lightning_logs/cross_year_train_ecol2l3_debug/utae_train_2018_posweight20/wildfire_progression/jqak9tz2/checkpoints/best-epoch=42-val_avg_precision=0.43.ckpt', data_dir='/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/data/processed/WSTS_all_hdf5_optimized', do_cross_year_experiment='true', cross_year_split_json_path='/share/home/e2406754/cde_mt/CDE_Master_Thesis_Wildfire_CL/output/data_split/cross_year_spatial_eco_l3_split.json', cross_year_train_id=2018, background_size=200, explain_size=100, save_dir='shap_feature_plots/cross_year_ecol2l3_debug/2018_posweight18')
+Using cross-year split:
+Train year: 2018, Eval year: 2018
+Train events: 129, Val events: 23, Test events: 24
+Loading HDF5 files
+True [2018] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+Initial train dataset size: 2101
+Final train dataset size after filtering: 2101
+Loading HDF5 files
+True [2018] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+Initial val dataset size: 332
+Final val dataset size after filtering: 332
+Train dataset size: 2101
+Using cross-year split:
+Train year: 2018, Eval year: 2018
+Train events: 129, Val events: 23, Test events: 24
+Loading HDF5 files
+True [2018] do_cross_year_experimentdo_cross_year_experimentdo_cross_year_experimentdo_cross_year_experiment
+Using cross years experiment related stats
+computing missing_values for pos_class_weight, cross-year experimentation
+Initial test dataset size: 460
+Final test dataset size after filtering: 460
+Test dataset size: 460
+Device used: cpu
+Found 200 positive samples in dataset of size 2101
+Found 100 positive samples in dataset of size 460
+Background batch shape: torch.Size([200, 5, 40, 128, 128]) DOY shape: N/A
+Explanation batch shape: torch.Size([100, 5, 40, 128, 128]) DOY shape: N/A
+Raw SHAP type: <class 'numpy.ndarray'>
+Raw SHAP shape: (100, 5, 40, 128, 128, 1)
+Final SHAP shape: (100, 5, 40, 128, 128)
+SHAP feature plots saved to shap_feature_plots/cross_year_ecol2l3_debug/2018_posweight18/
+Total time taken: 4169.70 seconds
