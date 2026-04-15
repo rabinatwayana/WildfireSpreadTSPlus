@@ -7,6 +7,14 @@ from src.models.utae_paps_models.utae import Temporal_Aggregator
 
 from .BaseModel import BaseModel
 
+# https://www.geeksforgeeks.org/deep-learning/kaiming-initialization-in-deep-learning/
+# when we load pretrained weights, we need to replicate the only conv1 weights to match the number of input channels.
+# If encoder_weights="imagenet", all layers are initialized with ImageNet weights, and the first conv layer is not random, but modified from pretrained weights to match input channels.
+# Input channels: source: https://github.com/qubvel-org/segmentation_models.pytorch (readme)
+# The input channels parameter allows you to create a model that can process a tensor with an arbitrary number of channels. If you use pretrained weights from ImageNet, the weights of the first convolution will be reused:
+#     For the 1-channel case, it would be a sum of the weights of the first convolution layer.
+#     Otherwise, channels would be populated with weights like new_weight[:, i] = pretrained_weight[:, i % 3], and then scaled with new_weight * 3 / new_in_channels.
+
 
 class SMPTempModel(BaseModel):
     """_summary_ Segmentation model based on the SMP package. We add an LTAE block to the U-Net model.
@@ -15,21 +23,24 @@ class SMPTempModel(BaseModel):
         self,
         encoder_name: str,
         n_channels: int,
-        flatten_temporal_dimension: bool,
-        pos_class_weight: float,
+        # flatten_temporal_dimension: bool,
+        # pos_class_weight: float,
         encoder_weights = None,
+        temporal_position_mode: str | None = None,
         *args: Any,
         **kwargs: Any
     ):
         super().__init__(
             n_channels=n_channels,
-            flatten_temporal_dimension=flatten_temporal_dimension,
-            pos_class_weight=pos_class_weight,
-            use_doy=False, 
+            # flatten_temporal_dimension=flatten_temporal_dimension,
+            temporal_position_mode=temporal_position_mode,
+            # pos_class_weight=pos_class_weight,
+            # use_doy=False, 
             *args,
             **kwargs
         )
         self.save_hyperparameters()
+        self.temporal_position_mode = temporal_position_mode
         encoder_weights = encoder_weights if encoder_weights != "none" else None
         self.model = smp.Unet(
             encoder_name=encoder_name,  # choose encoder, e.g. mobilenet_v2 or efficientnet-b7
@@ -79,24 +90,32 @@ class SMPTempModel(BaseModel):
             aggregated_skips.append(aggregated)
         dummy = encoder_features[0][0]
         decoder_features = [dummy] + aggregated_skips + [aggregated_last]
-        decoder_output = self.model.decoder(*decoder_features)
+        # decoder_output = self.model.decoder(*decoder_features)
+        decoder_output = self.model.decoder(decoder_features)
         masks = self.model.segmentation_head(decoder_output)
         return masks
     
-    def load_state_dict(self, state_dict, strict=True):
-        conv1_key = "model.encoder.conv1.weight"
-        if conv1_key in state_dict:
-            pretrained_weight = state_dict[conv1_key]
-            current_weight = self.state_dict()[conv1_key]
-            # Check if there is a channel mismatch.
-            if pretrained_weight.shape[1] != current_weight.shape[1]:
-                print("Replicating the conv1 weight")
-                # Calculate the replication factor (e.g., 35 / 7 = 5)
-                factor = current_weight.shape[1] // pretrained_weight.shape[1]
-                # Repeat the pretrained weights along the channel dimension
-                # and divide by the factor to preserve the scale.
-                adapted_weight = pretrained_weight.repeat(1, factor, 1, 1) / factor
-                state_dict[conv1_key] = adapted_weight
-        # Load the updated state dict
-        super().load_state_dict(state_dict, strict=strict)
+    # RT: Not sure for loading pretrained model,  why we needto replicate
+    # def load_state_dict(self, state_dict, strict=True):
+    #     conv1_key = "model.encoder.conv1.weight"
+    #     if conv1_key in state_dict:
+    #         pretrained_weight = state_dict[conv1_key]
+    #         current_weight = self.state_dict()[conv1_key]
+    #         # Check if there is a channel mismatch.
+    #         if pretrained_weight.shape[1] != current_weight.shape[1]:
+    #             print("Replicating the conv1 weight")
+    #             # Calculate the replication factor (e.g., 35 / 7 = 5)
+    #             factor = current_weight.shape[1] // pretrained_weight.shape[1]
+    #             # Repeat the pretrained weights along the channel dimension
+    #             # and divide by the factor to preserve the scale.
+    #             adapted_weight = pretrained_weight.repeat(1, factor, 1, 1) / factor
+    #             state_dict[conv1_key] = adapted_weight
+    #     # Load the updated state dict
+    #     super().load_state_dict(state_dict, strict=strict)
 
+#Kaiming
+# with torch.no_grad():
+#     new_conv.weight[:, :3] = old_weights  # pretrained RGB
+#     nn.init.kaiming_normal_(new_conv.weight[:, 3:], mode="fan_out", nonlinearity="relu")
+
+#projection
