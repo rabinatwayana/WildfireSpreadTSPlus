@@ -397,7 +397,9 @@ class FireSpreadDataset(Dataset):
         sin_feats = torch.sin(torch.deg2rad(degree_feats))
         cos_feats = torch.cos(torch.deg2rad(degree_feats))
 
-        # Insert cos_feats right after sin_feats
+        # print("cos finite=====:", torch.isfinite(cos_feats).all())
+        # print("cos min/max=====:", cos_feats.min().item(), cos_feats.max().item())
+
         x[:, self.indices_of_degree_features, ...] = sin_feats
 
         # Compute binary mask of active fire pixels before normalization changes what 0 means. 
@@ -407,6 +409,7 @@ class FireSpreadDataset(Dataset):
 
         # Adds the binary fire mask as an additional channel to the input data.
         x = torch.cat([x, binary_af_mask], axis=1)
+        x = torch.cat([x, cos_feats], dim=1)
 
         # Replace NaN values with 0, thereby essentially setting them to the mean of the respective feature.
         x = torch.nan_to_num(x, nan=0.0)
@@ -427,7 +430,7 @@ class FireSpreadDataset(Dataset):
         #     cos_feats,        # insert here
         #     x[:, -2:, ...]    # keep last 2 channels at the end
         # ], dim=1)
-
+        
         return x, y
 
     def augment(self, x, y):
@@ -445,29 +448,29 @@ class FireSpreadDataset(Dataset):
             _type_: _description_
         """
     
-        # Need square crop to prevent rotation from creating/destroying data at the borders, due to uneven side lengths.
-        # Try several crops, prefer the ones with most fire pixels in output, followed by most fire_pixels in input
-        best_n_fire_pixels = -1
-        best_crop = (None, None)
+        # # Need square crop to prevent rotation from creating/destroying data at the borders, due to uneven side lengths.
+        # # Try several crops, prefer the ones with most fire pixels in output, followed by most fire_pixels in input
+        # best_n_fire_pixels = -1
+        # best_crop = (None, None)
 
-        for i in range(10):
-            top = np.random.randint(0, x.shape[-2] - self.crop_side_length)
-            left = np.random.randint(0, x.shape[-1] - self.crop_side_length)
-            x_crop = TF.crop(
-                x, top, left, self.crop_side_length, self.crop_side_length)
-            y_crop = TF.crop(
-                y, top, left, self.crop_side_length, self.crop_side_length)
+        # for i in range(10):
+        #     top = np.random.randint(0, x.shape[-2] - self.crop_side_length)
+        #     left = np.random.randint(0, x.shape[-1] - self.crop_side_length)
+        #     x_crop = TF.crop(
+        #         x, top, left, self.crop_side_length, self.crop_side_length)
+        #     y_crop = TF.crop(
+        #         y, top, left, self.crop_side_length, self.crop_side_length)
 
-            # We really care about having fire pixels in the target. But if we don't find any there,
-            # we care about fire pixels in the input, to learn to predict that no new observations will be made,
-            # even though previous days had active fires.
-            n_fire_pixels = x_crop[:, -1, ...].mean() + \
-                1000 * y_crop.float().mean()
-            if n_fire_pixels > best_n_fire_pixels:
-                best_n_fire_pixels = n_fire_pixels
-                best_crop = (x_crop, y_crop)
+        #     # We really care about having fire pixels in the target. But if we don't find any there,
+        #     # we care about fire pixels in the input, to learn to predict that no new observations will be made,
+        #     # even though previous days had active fires.
+        #     n_fire_pixels = x_crop[:, -1, ...].mean() + \
+        #         1000 * y_crop.float().mean()
+        #     if n_fire_pixels > best_n_fire_pixels:
+        #         best_n_fire_pixels = n_fire_pixels
+        #         best_crop = (x_crop, y_crop)
 
-        x, y = best_crop
+        # x, y = best_crop
 
         hflip = bool(np.random.random() > 0.5)
         vflip = bool(np.random.random() > 0.5)
@@ -557,13 +560,14 @@ class FireSpreadDataset(Dataset):
     @staticmethod
     def get_static_and_dynamic_feature_ids():
         """_summary_ Returns the indices of static and dynamic features.
-        Static features include topographical features and one-hot encoded land cover classes.
 
+        Static features include topographical features and one-hot encoded land cover classes.
+        7,13,19 - angular features (wind direction, aspect and forecast wind direction)
         Returns:
             _type_: _description_ Tuple of lists of integers, first list contains static feature indices, second list contains dynamic feature indices.
         """
-        static_feature_ids = [12,13,14] + list(range(16,33))
-        dynamic_feature_ids = list(range(12)) + [15] + list(range(33,40))
+        static_feature_ids = [12,13,14] + list(range(16,33))+[41]
+        dynamic_feature_ids = list(range(12)) + [15] + list(range(33,40))+[40,42]
         return static_feature_ids, dynamic_feature_ids
 
     @staticmethod
@@ -582,9 +586,9 @@ class FireSpreadDataset(Dataset):
             dynamic_features_to_keep = list(set(dynamic_features_to_keep) & set(features_to_keep))
             dynamic_features_to_keep.sort()
 
-        if type(features_to_keep) == list:
-            static_features_to_keep = list(set(static_features_to_keep) & set(features_to_keep))
-            static_features_to_keep.sort()
+        # if type(features_to_keep) == list:
+        #     static_features_to_keep = list(set(static_features_to_keep) & set(features_to_keep))
+        #     static_features_to_keep.sort()
 
         return static_features_to_keep, dynamic_features_to_keep
 
@@ -610,7 +614,7 @@ class FireSpreadDataset(Dataset):
 
         # If we deduplicate static features, we remove them from all time steps but the last one.
         # The last day then gets dynamic and static features. All other days only get dynamic features. 
-        n_features = (int(deduplicate_static_features)*n_dynamic_features)*(n_observations-1) + n_all_features #+3 # +3 for the cos of degree features
+        n_features = (int(deduplicate_static_features)*n_dynamic_features)*(n_observations-1) + n_all_features # +3 for the cos of degree features
 
         return n_features
 
