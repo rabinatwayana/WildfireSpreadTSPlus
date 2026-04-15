@@ -42,8 +42,7 @@ class BaseModel(pl.LightningModule, ABC):
     def __init__(
         self,
         n_channels: int,
-        pos_class_weight: float,
-        loss_function: Literal["BCE", "Focal", "Lovasz", "Jaccard", "Dice", "BCE+Dice"],
+        loss_function: Literal["BCE", "Focal", "Lovasz", "Jaccard", "Dice", "BCE+Dice","Focal+Dice"],
         flatten_temporal_dimension: bool = False,
         temporal_position_mode: str | None = None,
         # use_doy: bool = False, #RT
@@ -51,6 +50,7 @@ class BaseModel(pl.LightningModule, ABC):
         required_img_size: Optional[Tuple[int, int]] = None,
         alpha_focal: Optional[float] = None, 
         f1_threshold: Optional[float] = None,
+        pos_class_weight: Optional[float] =None,
         *args: Any,
         **kwargs: Any
     ):
@@ -88,12 +88,22 @@ class BaseModel(pl.LightningModule, ABC):
             )
 
         # Normalize class weights by assuming that the negative class has weight 1
-        if self.hparams.loss_function == "Focal":
+        if self.hparams.loss_function == "Focal" or self.hparams.loss_function == "Focal+Dice":
             if self.hparams.alpha_focal is None:
-                w = self.hparams.pos_class_weight
-                alpha = w / (1 + w) if w is not None else 0.75
-                self.hparams.alpha_focal = min(alpha, 0.95) # RT: Calculating alpha for focal loss, alpha should be between 0-1
-                print(f"\nCalculated alpha for focal loss: {self.hparams.alpha_focal}")
+                raise ValueError(
+                    f"Invalid configuration: loss_function={self.hparams.loss_function}, "
+                    "but alpha_focal is None. Please set alpha_focal."
+                )
+        if self.hparams.loss_function == "BCE" or self.hparams.loss_function == "BCE+Dice":
+            if self.hparams.pos_class_weight is None:
+                raise ValueError(
+                    f"Invalid configuration: loss_function={self.hparams.loss_function}, "
+                    "but pos_class_weight is None. Please set pos_class_weight."
+                )
+                # w = self.hparams.pos_class_weight
+                # alpha = w / (1 + w) if w is not None else 0.75
+                # self.hparams.alpha_focal = min(alpha, 0.95) # RT: Calculating alpha for focal loss, alpha should be between 0-1
+                # print(f"\nCalculated alpha for focal loss: {self.hparams.alpha_focal}")
 
         self.loss = self.get_loss()
         threshold = self.hparams.f1_threshold if self.hparams.f1_threshold is not None else 0.5
@@ -248,6 +258,10 @@ class BaseModel(pl.LightningModule, ABC):
             _type_: _description_
         """
         y_hat, y = self.get_pred_and_gt(batch)
+
+        # print("y sum")
+        # print(y.sum(), y.numel(), y.sum() / y.numel())
+
         # print("y_hat statistics")
         # print(y_hat.min().item(), y_hat.max().item(), y.float().mean().item())
 
@@ -491,9 +505,26 @@ class BaseModel(pl.LightningModule, ABC):
             "bce": nn.BCEWithLogitsLoss(pos_weight=self.pos_weight),
             "dice": DiceLoss(mode="binary"),
         }
+        elif self.hparams.loss_function == "Focal+Dice":
+            return {
+                "focal": lambda y_hat, y: sigmoid_focal_loss(
+                    y_hat,
+                    y.float(),
+                    alpha=self.hparams.alpha_focal,   # IMPORTANT for imbalance
+                    gamma=2.0,
+                    reduction="mean",
+                ),
+                "dice": DiceLoss(mode="binary"),
+            }
 
         elif self.hparams.loss_function == "Focal":
-            return sigmoid_focal_loss
+            return lambda y_hat, y: sigmoid_focal_loss(
+                y_hat,
+                y.float(),
+                alpha=self.hparams.alpha_focal,
+                gamma=2.0,
+                reduction="mean",
+            )
         elif self.hparams.loss_function == "Lovasz":
             return LovaszLoss(mode="binary")
         elif self.hparams.loss_function == "Jaccard":
@@ -502,21 +533,59 @@ class BaseModel(pl.LightningModule, ABC):
             return DiceLoss(mode="binary")
 
     def compute_loss(self, y_hat, y):
+        # if self.hparams.loss_function == "Focal":
+        #     # print(f"Using self.hparams.alpha_focal, {self.hparams.alpha_focal}")
+        #     return self.loss(
+        #         y_hat,
+        #         y.float(),
+        #         alpha=self.hparams.alpha_focal, #RT
+        #         # alpha=1 - self.hparams.pos_class_weight, 
+        #         gamma=2,
+        #         reduction="mean",
+        #     )
         if self.hparams.loss_function == "Focal":
-            return self.loss(
-                y_hat,
-                y.float(),
-                alpha=self.hparams.alpha_focal, #RT
-                # alpha=1 - self.hparams.pos_class_weight, 
-                gamma=2,
-                reduction="mean",
-            )
+            return self.loss(y_hat, y)
+            # compute actual tensor #working
+            # focal = sigmoid_focal_loss(
+            #     y_hat,
+            #     y.float(),
+            #     alpha=self.hparams.alpha_focal,
+            #     gamma=2,
+            #     reduction="mean",
+            # )
+            # # dice component
+            # probs = torch.sigmoid(y_hat)
+            # intersection = (probs * y).sum()
+            # dice = 1 - (2. * intersection + 1e-6) / (probs.sum() + y.sum() + 1e-6)
+            # return focal
+        elif self.hparams.loss_function == "Focal+Dice":
+            focal = self.loss["focal"](y_hat, y)   # logits
+            probs = torch.sigmoid(y_hat)
+            dice = self.loss["dice"](probs, y)     # probabilities
+            # return focal + dice
+            return 0.7 * focal + 0.3 * dice
+        # elif self.hparams.loss_function == "Focal+Dice": #working code
+        #     # compute actual tensor
+        #     focal = sigmoid_focal_loss(
+        #         y_hat,
+        #         y.float(),
+        #         alpha=self.hparams.alpha_focal,
+        #         gamma=2,
+        #         reduction="mean",
+        #     )
+        #     # dice component
+        #     probs = torch.sigmoid(y_hat)
+        #     intersection = (probs * y).sum()
+        #     dice = 1 - (2. * intersection + 1e-6) / (probs.sum() + y.sum() + 1e-6)
+        #     return focal + dice
+    
         elif self.hparams.loss_function == "BCE+Dice":
             print("Computing combined BCE + Dice loss...")
             y = y.float().to(y_hat.device)
             bce = self.loss["bce"](y_hat, y)
             dice = self.loss["dice"](y_hat, y)
-            return (0.5*bce) + (0.5*dice)
+            # return (0.7*bce) + (0.3*dice)
+            return bce + dice
         else:
             return self.loss(y_hat, y.float())
 
