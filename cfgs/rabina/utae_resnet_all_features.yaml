@@ -1,0 +1,28 @@
+seed_everything: 0
+optimizer:
+  class_path: torch.optim.AdamW
+  init_args:
+    lr: 0.0001  # Reduced by 100x
+    weight_decay: 0.01 # Standard for AdamW to fight overfitting
+model:
+  class_path: models.SMPTempModel
+  init_args:
+    encoder_name: resnet18
+    encoder_weights: imagenet
+    n_channels: 43
+    temporal_position_mode: "relative"
+    flatten_temporal_dimension: False
+    loss_function: "Focal+Dice"
+    alpha_focal: 0.75
+    
+do_train: true
+do_predict: false
+do_test: true
+
+# flatten_temporal_dimension: true
+
+# pos_class_weight: 236
+# loss_function: Focal
+#     alpha_focal: 0.1
+# alpha_focal: 0.90
+#     pos_class_weight: 50
